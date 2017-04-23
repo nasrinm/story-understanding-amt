@@ -25,13 +25,13 @@ $sh start_server.sh
 To launch a HITs in the AMT sandbox, run launch_hits.sh, which runs the following command:
 ```
 python launch_hits.py \
-  --html_template=story_understanding.html \
+  --html_template=index.html \
   --hit_properties_file=hit_properties/story_understanding.json \
   --input_json_file=tmp/example_input.txt \
   --hit_ids_file=tmp/hit_ids.txt
 ```
-- The file `story_understanding.html` is a template that defines the UI of the HIT;
-you can find it in `hit_templates/story_understanding.html`.
+- The file `index.html` is a template that defines the UI of the HIT;
+you can find it in `hit_templates/index.html`.
 - The file `hit_properties/story_understanding.json` defines the properties of the HIT: title, keywords, price, etc.
 - The file `tmp/example_input.txt` contains inputs for the stories you want to load. The input to each HIT is a JSON object, and the input file contains one such JSON object per line.
 - The IDs of the created HITs are written to the file `tmp/hit_ids.txt`. You will use this file as input to other commands in order to operate on the batch of HITs that you just created.
