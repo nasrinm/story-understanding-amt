@@ -16,14 +16,14 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- generating color function -->
-    <script src='rcolor.js'></script>
+     <script src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/rcolor.js'></script>
  
-    <script type="text/babel" src='InstructionComponent.jsx'></script>
-    <script type="text/babel" src='FooterInstructionComponent.jsx'></script>
-    <script type="text/babel" src='SubHeaderInstructionComponent.jsx'></script>
-    <script type="text/babel" src='RuleManager.jsx'></script>
-    <script type="text/babel" src='app.jsx'></script>
-    <script src='main.js'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/InstructionComponent.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/FooterInstructionComponent.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/SubHeaderInstructionComponent.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/RuleManager.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/app.jsx'></script>
+    <script src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/main.js'></script>
     <style>
       * {
         margin-bottom:4px;
@@ -122,6 +122,11 @@
         <div class='col-md-10 col-md-offset-1' id='instruction-div'></div>
         <div class='col-md-10 col-md-offset-1' id='examples-div'></div>
       </div>
+      <div class='pull-right'>
+          <a href="https://youtu.be/UbTqb15tw58" class="btn btn-primary active" role="button" target="_blank" aria-pressed="true">Click Here for Video Instruction</a>
+      </div>
+      <div class='row' style="margin-top:15px"></div>
+
       
       <div class='row' style="margin-top:15px">
         <div class='col-md-10 col-md-offset-1 text-center' style="margin-top:-12px;">
@@ -146,17 +151,20 @@
         <br>
         <div id='grounding-container'></div>
       </div>-->
+    <div class='row' style="margin-top:0px">
+      <div id='submit-container' class='col-md-8 col-md-offset-4 pull-right'> 
+      {% include "amt.html" %}
+      </div>
+    </div>
+            <br>
       <div class='row' style="margin-top:100px">
-        <div id='comment-container' class='col-md-8 col-md-offset-2 text-center'>
-       Do you have any comments about the task? We appreciate your input. You can also contact us via <a href="mailto:rocnlp@gmail.com?Subject=storyUnderstanding" target="_top">email</a> with any questions.
-      <textarea id='comment-area' class='form-control tb-margin'></textarea>
+
+      <div id='comment-container' class='col-md-8 col-md-offset-2 text-center'>
+       Do you have any comments about the task? You can contact us via <a href="mailto:rocnlp@gmail.com?Subject=storyUnderstanding" target="_top">email</a> with any questions. We appreciate your input.
       </div>
       </div>
       <div class='row' style="margin-top:0px">
-        <div id='submit-container' class='col-md-4 col-md-offset-4 text-center'>
-          {% include "amt.html" %}
-        </div>
-        <span class='col-md-4 col-md-offset-4' style="padding-left:70px">You must accept this HIT before you can submit it.</span>
+        <span class='col-md-8 text-center' style="padding-left:70px"><i>**You must accept this HIT before you can submit it.</i></span>
       </div>
       <div id="footer-instructions" style="overflow: auto; text-align:left"><b>Recommended Steps</b></div>
     </div>

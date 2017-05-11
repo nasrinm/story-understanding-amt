@@ -16,14 +16,14 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- generating color function -->
-    <script src='rcolor.js'></script>
+     <script src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/rcolor.js'></script>
  
-    <script type="text/babel" src='InstructionComponent.jsx'></script>
-    <script type="text/babel" src='FooterInstructionComponent.jsx'></script>
-    <script type="text/babel" src='SubHeaderInstructionComponent.jsx'></script>
-    <script type="text/babel" src='RuleManager.jsx'></script>
-    <script type="text/babel" src='app.jsx'></script>
-    <script src='main.js'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/InstructionComponent.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/FooterInstructionComponent.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/SubHeaderInstructionComponent.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/RuleManager.jsx'></script>
+    <script type="text/babel" src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/app.jsx'></script>
+    <script src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/main.js'></script>
     <style>
       * {
         margin-bottom:4px;
@@ -114,6 +114,7 @@
          white-space: nowrap;
          width: 105px;
       }
+      
     </style>
   </head>
   <body>
@@ -146,65 +147,72 @@
         <br>
         <div id='grounding-container'></div>
       </div>-->
+
+
+
+
+      <div class='row' style="margin-top:0px">
+        <div id='submit-container' class='col-md-4 text-right'>
+          <script type='text/json' id='input'>
+          
+        </script>
+        <form id='results-form' method='post' action='dummy'>
+          <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+          <input type='hidden' value='' name='output' id='output'/>
+          <input type='submit' class='btn btn-md btn-success' id='submit-btn' value='Submit Results' disabled/>
+        </form>
+        <script>
+          var amt = (function() { // type='submit'
+              function getUrlParam(name) {
+              var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+              return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+            }
+
+            function getInput(default_input) {
+              if (typeof(default_input) === 'undefined') default_input = null;
+              try {
+                return JSON.parse($('#input').html());
+              } catch (e) {
+                return default_input;
+              }
+            }
+
+            function setOutput(output) {
+              $('#output').val(JSON.stringify(output));
+            }
+
+            function isPreview() {
+              var assignment_id = getUrlParam('assignmentId');
+              if (assignment_id === null) return false;
+              return assignment_id == 'ASSIGNMENT_ID_NOT_AVAILABLE';
+            }
+
+            function setupSubmit() {
+              var submit_to = getUrlParam('turkSubmitTo');
+              $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');
+              $('#assignmentId').val(getUrlParam('assignmentId'));
+            }
+
+            return {
+              getInput: getInput,
+              setOutput: setOutput,
+              isPreview: isPreview,
+              setupSubmit: setupSubmit,
+            }
+          })();
+        </script>
+        </div>
+
+      </div>
       <div class='row' style="margin-top:100px">
+        <br>
+        <br>
         <div id='comment-container' class='col-md-8 col-md-offset-2 text-center'>
        Do you have any comments about the task? We appreciate your input. You can also contact us via <a href="mailto:rocnlp@gmail.com?Subject=storyUnderstanding" target="_top">email</a> with any questions.
       <textarea id='comment-area' class='form-control tb-margin'></textarea>
       </div>
       </div>
-      <div class='row' style="margin-top:0px">
-        <div id='submit-container' class='col-md-4 col-md-offset-4 text-center'>
-          <script type='text/json' id='input'>
-  
-</script>
-<form id='results-form' method='post' action='dummy'>
-  <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
-  <input type='hidden' value='' name='output' id='output'/>
-  <input type='submit' class='btn btn-md btn-success' id='submit-btn' value='Submit Results' disabled/>
-</form>
-<script>
-  var amt = (function() { // type='submit'
-      function getUrlParam(name) {
-      var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-      return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
-    }
-
-    function getInput(default_input) {
-      if (typeof(default_input) === 'undefined') default_input = null;
-      try {
-        return JSON.parse($('#input').html());
-      } catch (e) {
-        return default_input;
-      }
-    }
-
-    function setOutput(output) {
-      $('#output').val(JSON.stringify(output));
-    }
-
-    function isPreview() {
-      var assignment_id = getUrlParam('assignmentId');
-      if (assignment_id === null) return false;
-      return assignment_id == 'ASSIGNMENT_ID_NOT_AVAILABLE';
-    }
-
-    function setupSubmit() {
-      var submit_to = getUrlParam('turkSubmitTo');
-      $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');
-      $('#assignmentId').val(getUrlParam('assignmentId'));
-    }
-
-    return {
-      getInput: getInput,
-      setOutput: setOutput,
-      isPreview: isPreview,
-      setupSubmit: setupSubmit,
-    }
-  })();
-</script>
-        </div>
-        <span class='col-md-4 col-md-offset-4' style="padding-left:70px">You must accept this HIT before you can submit it.</span>
-      </div>
+      <span class='col-md-8 text-center' style="padding-left:70px">You must accept this HIT before you can submit it.</span>
       <div id="footer-instructions" style="overflow: auto; text-align:left"><b>Recommended Steps</b></div>
     </div>
   </body>

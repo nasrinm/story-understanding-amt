@@ -1,4 +1,4 @@
-import argparse, json, sys
+import argparse, json, sys, io
 
 import simpleamt
 
@@ -23,6 +23,7 @@ def process_assignments(mtc, hit_id):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(parents=[simpleamt.get_parent_parser()])
+  parser.add_argument('--results')
   args = parser.parse_args()
   mtc = simpleamt.get_mturk_connection_from_args(args)
   
@@ -38,5 +39,5 @@ if __name__ == '__main__':
         results += process_assignments(mtc, hit_id)
 
   for assignment_result in results:
-    print json.dumps(assignment_result)
-
+    with io.open(args.results, 'w',encoding='utf-8') as f:
+      f.write(json.dumps(assignment_result, ensure_ascii=False))

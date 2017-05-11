@@ -1,1 +1,6 @@
 config.json
+render_template.py
+simpleamt.pyc
+tmp/example_input.txt
+tmp/hit_ids.txt
+tmp/results.txt

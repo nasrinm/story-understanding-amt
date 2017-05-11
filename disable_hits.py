@@ -29,5 +29,16 @@ if __name__ == '__main__':
   if s == 'Y' or s == 'y':
     for hit_id in hit_ids:
       mtc.disable_hit(hit_id)
+      f = open(args.hit_ids_file,"r+")
+      d = f.readlines()
+      f.seek(0)
+      for i in d:
+        if i.strip('\n') not in hit_ids:
+          f.write(i)
+      f.truncate()
+      f.close()
+
+
   else:
     print 'Aborting'
+

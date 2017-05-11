@@ -13,7 +13,7 @@ var SubHeaderInstructionComponent = React.createClass({
     var header = ""; // Instruction header
     var instructions = []; // List of instruction bullets
     if(this.props.step==0) {
-      header = "Choose the correct ending";
+      header = "Choose the best ending";
       instructions = ["Make sure you select the correct ending before continuing."];
     } else if(this.props.step==1) {
       header = "Add general logical rules";
@@ -34,7 +34,7 @@ var SubHeaderInstructionComponent = React.createClass({
       instructions.push("See the 'recommended steps' tab for more specific instructions.");
     }
     return (
-      <div className="col-md-4 col-md-offset-4 text-center">
+      <div className="col-md-8">
         <h3><b>{"Step: " + (this.props.step+1) + " " + header}</b></h3>
         <ol >
         {

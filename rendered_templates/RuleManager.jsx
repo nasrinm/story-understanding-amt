@@ -1,7 +1,8 @@
 // Parameters
 var stopWordList = "a about above across after again against almost alone along already also although always an and another any as ask asked asking asks at away b back backed backing backs be became because become becomes been before began behind being beings best better between big both but by c came can cannot case cases certain certainly clear clearly come could d did differ different differently do does done down down downed downing downs during e each early either end ended ending ends enough even evenly ever f face faces fact facts far felt few find finds for four full fully further furthered furthering furthers g gave general generally get gets give given gives go going good goods got great greater greatest group h had has have having here herself high high high higher highest how however if important in interest interested interesting interests into is it its itself j just k keep keeps kind knew know known knows l large largely last later latest least less let lets like likely long longer longest m made make making might more most mostly mr mrs much must n necessary need needed needing needs never new new newer newest next not now number numbers o of off often old older oldest on only open opened opening opens or order ordered ordering orders other others our out over p part parted parting parts per perhaps place places point pointed pointing points possible present presented presenting presents put puts q quite r rather really right right room rooms s said same saw say says second seconds see seem seemed seeming seems sees several shall should show showed showing shows side sides since small smaller smallest so some states still still such sure t take taken than that the then there therefore think thinks though thought thoughts three through thus to today too took toward turn turned turning turns two u under until up upon use used uses v very w want wanted wanting wants was way ways well wells went were what when where whether which while who whole whose why will with within without work worked working works would x y year years yet you young younger youngest z";
 var defaultObjects = ["someone", "something", "somewhere"];
-var defaultPrepositions =["at","in","from","with","by","about","under","along","without","on","before","after","-"]
+var defaultPrepositions =["about","after","along","at","but","by","before","during","for", "from", "in","into","on","of","to","with","without", "-"]
+
 
 var FooterInstructionComponent = window.FooterInstructionComponent;
 ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={1}/>, document.getElementById('footer-instructions'));
@@ -27,6 +28,7 @@ var PrepphraseComponent = React.createClass({
     
     return { editing: this.props.editing,
              customSubject: false,
+             customType: false,
              showSubject: ssinit,
              prepositionType: '',
              prepositionSubject: '',
@@ -44,8 +46,15 @@ var PrepphraseComponent = React.createClass({
   },
   
   prepositionTypeChangeHandler: function(event){
+
     if(event.target.value != '--') {
+      if(event.target.value == 'customOption') {
+        this.setState({customType: true, prepositionType: event.target.value});
+      }
+
       this.setState({showSubject: true, prepositionType: event.target.value});
+
+
     } else {
       this.setState({showSubject: false, prepositionType: event.target.value});
     }
@@ -58,8 +67,15 @@ var PrepphraseComponent = React.createClass({
     d['pObject'] = this.refs.prepositionSubject.value;
     return(d);
   },
+
+  resetPrepPhrase: function(){
+    this.refs.prepositionType.value = '';
+    this.refs.prepositionSubject.value='';
+    this.setState(this.getInitialState());
+  },
   
   render: function() {
+
     var wrapStyle = { display: 'inline-block', marginBottom: 15};
     var customStyle = { display: 'inline-block', margin: 5, marginBottom: -5, width:'auto' };
     var divStyle = { display: 'inline-block', marginRight: 5, marginBottom: -5, width:'auto', width:105 };
@@ -80,6 +96,8 @@ var PrepphraseComponent = React.createClass({
     }
     
     var prepositionSubjectStyle = { display: 'inline-block', marginRight: 5, marginBottom: -5, width:'auto' };
+    var prepositionTypeStyle = { display: 'inline-block', marginRight: 5, marginBottom: -5, width:'auto' };
+
     var subjectShowState = '';
     if(this.state.showSubject == true) {
       subjectShowState = '';
@@ -89,57 +107,90 @@ var PrepphraseComponent = React.createClass({
     
     if(this.state.editing == true) {
       if(this.state.customSubject == false) {
-        return(
-          <span style={wrapStyle}>
-            <select className='soflow' ref='prepositionType' defaultValue={prepositionTypeDefaultValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
-              <option value={prepositionTypeDefaultValue} disabled>{prepositionTypeDefault}</option>
-              <option value="~at">at</option>
-              <option value="~in">in</option>
-              <option value="~from">from</option>
-              <option value="~with">with</option>
-              <option value="~by">by</option>
-              <option value="~about">about</option>
-              <option value="~under">under</option>
-              <option value="~along">along</option>
-              <option value="~without">without</option>
-              <option value="~on">on</option>
-              <option value="~before">before</option>
-              <option value="~after">after</option>
-              <option value="--">--</option>
-            </select>
-            
-            <select className='soflow' ref='prepositionSubject' defaultValue={prepositionSubjectDefaultValue} onChange={this.prepositionSubjectChangeHandler} style={prepositionSubjectStyle} disabled = {subjectShowState}>
-              <option value={prepositionSubjectDefaultValue} disabled>{prepositionSubjectDefault}</option>
-              <option value="someone">someone</option>
-              <option value="something">something</option>
-              <option value="somewhere">somewhere</option>
-              <option value="customOption">[custom object]</option>
-            </select>
-          </span>
-        );
+          if(this.state.customType == false) {
+
+            return(
+              <span style={wrapStyle}>
+                <select className='soflow' ref='prepositionType' defaultValue={prepositionTypeDefaultValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
+                  <option value={prepositionTypeDefaultValue} disabled>{prepositionTypeDefault}</option>
+                  <option value="~about">about</option>
+                  <option value="~after">after</option>
+                  <option value="~along">along</option>
+                  <option value="~at">at</option>
+                  <option value="~before">before</option>
+                  <option value="~by">by</option>
+                  <option value="~for">for</option>
+                  <option value="~from">from</option>
+                  <option value="~in">in</option>
+                  <option value="~on">on</option>
+                  <option value="~under">under</option>
+                  <option value="~with">with</option>
+                  <option value="~without">without</option>
+                  <option value="customOption">[custom object]</option>
+                  <option value="--">--</option>
+
+                </select>
+                
+                <select className='soflow' ref='prepositionSubject' defaultValue={prepositionSubjectDefaultValue} onChange={this.prepositionSubjectChangeHandler} style={prepositionSubjectStyle} disabled = {subjectShowState}>
+                  <option value={prepositionSubjectDefaultValue} disabled>{prepositionSubjectDefault}</option>
+                  <option value="someone">someone</option>
+                  <option value="something">something</option>
+                  <option value="somewhere">somewhere</option>
+                  <option value="customOption">[custom object]</option>
+                </select>
+              </span>
+            );
+          } else {
+            return(
+            <span style={wrapStyle}>
+                <textarea ref='prepositionType' rows="1" maxLength="50" cols="15" placeholder="preposition" onChange={this.prepositionTypeChangeHandler} defaultValue={prepositionTypeDefaultValue} style={prepositionTypeStyle}></textarea>
+
+                <select className='soflow' ref='prepositionSubject' defaultValue={prepositionSubjectDefaultValue} onChange={this.prepositionSubjectChangeHandler} style={prepositionSubjectStyle} disabled = {subjectShowState}>
+                  <option value={prepositionSubjectDefaultValue} disabled>{prepositionSubjectDefault}</option>
+                  <option value="someone">someone</option>
+                  <option value="something">something</option>
+                  <option value="somewhere">somewhere</option>
+                  <option value="customOption">[custom object]</option>
+                </select>
+              </span>
+            );
+        }
       } else {
-        return(
-          <span style={wrapStyle}>
-            <select className='soflow' ref='prepositionType' defaultValue={prepositionTypeDefaultValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
-              <option value={prepositionTypeDefaultValue} disabled>{prepositionTypeDefault}</option>
-              <option value="at">at</option>
-              <option value="in">in</option>
-              <option value="from">from</option>
-              <option value="with">with</option>
-              <option value="by">by</option>
-              <option value="about">about</option>
-              <option value="under">under</option>
-              <option value="along">along</option>
-              <option value="without">without</option>
-              <option value="on">on</option>
-              <option value="before">before</option>
-              <option value="after">after</option>
-              <option value="--">--</option>
-            </select>
-          
-            <textarea ref='prepositionSubject' rows="1" maxLength="50" cols="15" placeholder="subject" onChange={this.prepositionSubjectChangeHandler} defaultValue={prepositionSubjectDefaultValue} style={prepositionSubjectStyle} disabled = {subjectShowState}></textarea>
-          </span>
-        );
+         if(this.state.customType == false) {
+
+          return(
+            <span style={wrapStyle}>
+              <select className='soflow' ref='prepositionType' defaultValue={prepositionTypeDefaultValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
+                <option value={prepositionTypeDefaultValue} disabled>{prepositionTypeDefault}</option>
+                <option value="about">about</option>
+                <option value="after">after</option>
+                <option value="along">along</option>
+                <option value="at">at</option>
+                <option value="before">before</option>
+                <option value="by">by</option>
+                <option value="for">for</option>
+                <option value="from">from</option>
+                <option value="in">in</option>
+                <option value="on">on</option>
+                <option value="under">under</option>
+                <option value="with">with</option>
+                <option value="without">without</option>
+                <option value="--">--</option>
+              </select>
+            
+              <textarea ref='prepositionSubject' rows="1" maxLength="50" cols="15" placeholder="subject" onChange={this.prepositionSubjectChangeHandler} defaultValue={prepositionSubjectDefaultValue} style={prepositionSubjectStyle} disabled = {subjectShowState}></textarea>
+            </span>
+          );
+        } else {
+            return (
+              <span style={wrapStyle}>
+
+                <textarea ref='prepositionType' rows="1" maxLength="50" cols="15" placeholder="preposition" onChange={this.prepositionTypeChangeHandler} defaultValue={prepositionTypeDefaultValue} style={prepositionTypeStyle} ></textarea>
+                <textarea ref='prepositionSubject' rows="1" maxLength="50" cols="15" placeholder="subject" onChange={this.prepositionSubjectChangeHandler} defaultValue={prepositionSubjectDefaultValue} style={prepositionSubjectStyle} disabled = {subjectShowState}></textarea>
+              </span>
+            );
+
+        }
       }
     } else {
       return(
@@ -156,12 +207,16 @@ React component containing rendered consequence
 */
 var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   getInitialState: function() {
-    return { linking: false, // are we currently linking?
+
+             var prepdefaultValue ='';
+    return { 
+             linking: false, // are we currently linking?
              linkList: [],   // words
              i:-1,           // temporary index of linked word
              colors:{},      // array of color links
              customSubject:false,
-             customObject:false
+             customObject:false,
+             prep: prepdefaultValue
             }
   },
 
@@ -201,12 +256,32 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   },
   
   getData: function() {
+
     var d = {};
     d['cPredicate'] = this.refs.consequencePredicate.value.trim();
     d['cSubject'] = this.refs.consequenceSubject.value.trim();
     d['cObject'] = this.refs.consequenceObject.value.trim();
+    d['cPrepType'] = this.refs.cpcomp.getPrepPhrase()['pType'];
+    d['cPrepObject'] = this.refs.cpcomp.getPrepPhrase()['pObject'];
+
     return(d);
   },
+
+
+  resetCons: function(){
+    this.setState(this.getInitialState());
+    this.refs.consequencePredicate.value = '';
+    this.refs.consequenceSubject.value='subject';
+    this.refs.consequenceObject.value='object';
+    for(var ref in this.refs) {
+      if(ref.includes('cpcomp')) {
+        this.refs['cpcomp'].resetPrepPhrase(this.props.index);
+
+      }
+    }
+    this.forceUpdate();
+  },
+  
   
   subjectChange: function(event){
     if(event.target.value == 'customOption') {
@@ -268,6 +343,12 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
               <option value="-">-</option>
               <option value="customOption">[custom object]</option>
             </select>
+
+            <PrepphraseComponent
+                  ref='cpcomp'
+                  editing={true}
+                  defaultPrep={this.state.prep}
+            />
           </span>
         );
       } else if (this.state.customSubject == false && this.state.customObject == true) {
@@ -284,6 +365,11 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
             <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
             
             <textarea ref='consequenceObject' rows="1" maxLength="50" cols="10" placeholder="object" defaultValue={this.props.consequenceObjectDefault} style={divStyle}></textarea>
+            <PrepphraseComponent
+                  ref='cpcomp'
+                  editing={true}
+                  defaultPrep={this.state.prep}
+            />
           </span>
         );
       } else if (this.state.customSubject == true && this.state.customObject == true) {
@@ -294,6 +380,13 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
             <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
             
             <textarea ref='consequenceObject' rows="1" maxLength="50" cols="10" placeholder="object" defaultValue={this.props.consequenceObjectDefault} style={divStyle}></textarea>
+          
+            <PrepphraseComponent
+                  ref='cpcomp'
+                  editing={true}
+                  defaultPrep={this.state.prep}
+            />
+
           </span>
         );
       } else {
@@ -316,6 +409,14 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
               <option value="somewhere">somewhere</option>
               <option value="customOption">[custom object]</option>
             </select>
+
+
+
+          <PrepphraseComponent
+                  ref='cpcomp'
+                  editing={true}
+                  defaultPrep={this.state.prep}
+          />
           </span>
         );
       }
@@ -408,6 +509,8 @@ var PremiseComponent = React.createClass({
     } else {
       return(this.state.act.trim() + " " + this.state.prep.trim());
     }
+
+
   },
 
   getOp: function() {
@@ -482,20 +585,44 @@ var PremiseComponent = React.createClass({
     this.props.removePremise(this.props.index);
   },
 
+  resetPremise: function(){
+
+    //this.setState(this.getInitialState());
+    this.refs.actionPredicate.value = '';
+    this.refs.actionSubject.value='subject';
+    this.refs.actionObject.value='object';
+    this.refs.op.value='and'
+    for(var ref in this.refs) {
+      if(ref.includes('ppcomp')) {
+        this.refs["ppcomp"].resetPrepPhrase(this.props.index);
+
+      }
+    }
+
+    this.forceUpdate();
+
+
+  },
+
   subjectChange: function(event){
     if(event.target.value == 'customOption') {
       this.setState({customSubject: true});
     }
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={2} />, document.getElementById('footer-instructions'));
+    console.log('Premise subjectChange');
+
   },
   objectChange: function(event){
     if(event.target.value == 'customOption') {
       this.setState({customObject: true});
     }
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={3} />, document.getElementById('footer-instructions'));
+
+
   },
   predicateChange: function() {
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={4} />, document.getElementById('footer-instructions'));
+
   },
 
   render: function() {
@@ -533,6 +660,7 @@ var PremiseComponent = React.createClass({
     } else {
       var actionObjectDefault = "object"
     }
+
 
     if(this.props.edit == true) {
       if (this.state.customValue == true || this.props.predicateIndex == 0) { // no options to chose from
@@ -697,6 +825,7 @@ var PremiseComponent = React.createClass({
       }
     } else {
       if(this.state.linking == true  && this.props.step == 2){
+        console.log("step 1")
         return(
           <div style = {wrapStyle}>
             <div style={linkStyle}>
@@ -725,6 +854,8 @@ var PremiseComponent = React.createClass({
           </div>
           );
       } else { // not editing and step 3
+           console.log("step 2")
+
           return(
             <div style = {wrapStyle}>
               <div style={linkStyle}>
@@ -792,6 +923,10 @@ var RuleComponent = React.createClass({
     var consequencePredicate = consequence['cPredicate']
     var consequenceSubject = consequence['cSubject']
     var consequenceObject = consequence['cObject']
+    var consequencePrepType = consequence['cPrepType']
+    var consequencePrepObject = consequence['cPrepObject']
+
+
 
     if(this.props.index > 0 && consequencePredicate=="" && consequenceSubject=="" && consequenceObject=="" && actions.join().trim() == "") { // discard empty inference rules
       this.props.toggleEdit();
@@ -807,12 +942,24 @@ var RuleComponent = React.createClass({
       }
     }
     this.props.toggleEdit();
-    this.props.updatePredicate(actions, ops, consequenceSubject + " " + consequencePredicate + " " + consequenceObject, this.props.index);
+    this.props.updatePredicate(actions, ops, consequenceSubject + " " + consequencePredicate + " " + consequenceObject + " " + consequencePrepType + " " + consequencePrepObject, this.props.index);
     this.setState({editing: false});
   },
   
   resetRule: function() {
-    console.log('reset rule')
+    console.log('reset rule');
+    for(var ref in this.refs) {
+      if(ref.includes('action')) {
+        this.refs[ref].resetPremise(this.props.index);
+
+      } 
+      if(ref.includes('consequence')){
+        this.refs[ref].resetCons(this.props.index);
+
+      }
+    }
+    ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={1} />, document.getElementById('footer-instructions'));
+
   },
 
   addPremise: function() {
@@ -839,6 +986,11 @@ var RuleComponent = React.createClass({
     this.props.addPredicate();
     this.setState({editing: false});
   },
+
+  displayNL: function() {
+    console.log("display NL");
+    this.props.displayNL();
+  },
   
   setLink: function() {
     var l = this.state.linking
@@ -848,6 +1000,8 @@ var RuleComponent = React.createClass({
   },
 
   renderNormal: function() {
+    console.log('Rule render normal ');
+
     var btnVisibility = "";
     if(this.props.index==this.props.numPreds-1) {
       btnVisibility="inline-block";
@@ -857,8 +1011,11 @@ var RuleComponent = React.createClass({
     var divStyle = { display: 'inline-block', margin: 5 };
     var editBtnStyle = { display: 'inline-block', margin: 5, backgroundColor:'#008CBA' };
     var removeBtnStyle = { display: 'inline-block', margin: 5, backgroundColor:'red' };
+    var nlBtnStyle = { display: 'inline-block', margin: 5, backgroundColor:'#5cb85c' };
+
     var btnStyle = { display: btnVisibility, margin: 5};
-    var font = { fontSize: 50}
+    var font = { fontSize: 50};
+
 
     if(this.props.step==2) {
       return (
@@ -900,6 +1057,7 @@ var RuleComponent = React.createClass({
           alreadyLinking={this.state.linking}
           linkToggle = {this.props.linkToggle}>
         </ConsequenceComponent>
+        <button onClick={this.displayNL} className='btn btn-xs' style={nlBtnStyle}>Show Natural Language</button>
         <hr></hr>
         </div>
       );
@@ -929,7 +1087,7 @@ var RuleComponent = React.createClass({
             }, this)
           }
           </div>
-          <b>implies</b>
+        <b>implies</b>
           <ConsequenceComponent
             ref="consequence"
             cons={this.props.cons}
@@ -966,7 +1124,7 @@ var RuleComponent = React.createClass({
             }, this)
           }
           </div>
-          <b>implies</b>
+        <b>implies</b>
           <ConsequenceComponent
             ref="consequence"
             cons={this.props.cons}
@@ -986,15 +1144,32 @@ var RuleComponent = React.createClass({
   },
 
   renderForm: function() {
+    //console.log(this.props.cons.substring(1, this.props.cons.indexOf('~')));
+    console.log('Rule render form ');
+    console.log(this.props.index);
+    console.log(this.props.numPreds-1);
+
     var divStyle = { display: 'inline-block', margin: 5, marginBottom: -5 };
     var inlineBlock = { marginLeft:10 };
     var saveBtnStyle ={ marginLeft:10, backgroundColor:'#008CBA'  };
     var btnStyle = { display: 'inline-block', marginLeft: 5, marginRight:-10, backgroundColor:'#4CAF50' };
     var wrapStyle = { display: 'inline-block' };
+    var impliesStyle = {marginLeft: 50 };
+
     
     var consequenceSubjectDefault = this.props.cons.split(" ")[0];
-    var consequencePredicateDefault = this.props.cons.split(" ").slice(1, -1).join(" ");
-    var consequenceObjectDefault = this.props.cons.split(" ").slice(-1)[0];
+    //var consequencePredicateDefault = this.props.cons.split(" ").slice(1, -1).join(" ");
+
+
+    if(this.props.cons.substring(1, this.props.cons.indexOf('~'))!=""){
+      var consequencePredicateDefault = this.props.cons.substring(1, this.props.cons.indexOf('~')).split(" ").slice(0, -1).join(" ");
+      var consequenceObjectDefault = this.props.cons.substring(1, this.props.cons.indexOf('~'))[0].split(" ").slice(-1);
+
+    } else {var consequencePredicateDefault = "";
+            var consequenceObjectDefault = ""; 
+    }
+
+
 
     return (
       <div className='predicate'>
@@ -1024,7 +1199,7 @@ var RuleComponent = React.createClass({
           }, this)
         }
         </span>
-        <span><b>implies&nbsp;&nbsp;</b></span>
+        <div style={impliesStyle}><b>implies&nbsp;&nbsp;</b>
         <ConsequenceComponent
           ref="consequence"
           cons={this.props.cons}
@@ -1039,12 +1214,17 @@ var RuleComponent = React.createClass({
         </ConsequenceComponent>
         <button onClick={this.save} className='btn btn-xs save-predicate-btn' style={saveBtnStyle}>Save</button>
         <button onClick={this.resetRule} className='btn btn-xs save-predicate-btn' style={saveBtnStyle}>Reset</button>
+        </div>
         <hr></hr>
       </div>
     );
   },
 
   render: function() {
+    console.log("refs:");
+    console.log(this.refs);
+    console.log("state");
+    console.log(this.state);
     if(this.state.editing) {
       return this.renderForm();
     } else {
@@ -1061,6 +1241,7 @@ var PredicateManager = React.createClass({
                         ]
                       ];
     predicates[0][3][20] = [""];
+    console.log(predicates);
     return {
       predicates: predicates,
       consList: [],           // consequence list
@@ -1068,7 +1249,8 @@ var PredicateManager = React.createClass({
       linkToggle: false,      // toggle depending on link state
       step: 0,                // hit step
       edit: true,             // are we editing a rule?
-      stepBtn: true
+      stepBtn: true,
+      nls: []
     }
   },
 
@@ -1096,11 +1278,20 @@ var PredicateManager = React.createClass({
   },
 
   addPredicate: function() {
+    console.log('addPredicate ');
     var predicates = this.state.predicates;
     predicates.push([[""],[""],"",[[],[]]]);
     predicates[predicates.length-1][3][20] = [""];
     this.toggleEdit();
     this.setState({predicates: predicates});
+    console.log(predicates);
+  },
+
+
+  resetPredicate: function(i) {
+    this.removePredicate(i)
+    this.addPredicate();
+
   },
 
   addPremise: function(i) {
@@ -1112,6 +1303,7 @@ var PredicateManager = React.createClass({
     predicates[i][3][predicates[i][3].length-20] = [""]; // TODO: fix
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={1} />, document.getElementById('footer-instructions'));
     this.setState({predicates:predicates});
+    console.log(predicates);
   },
   
   removePremise: function(i, j) { // ith rule, jth premise
@@ -1136,14 +1328,65 @@ var PredicateManager = React.createClass({
     predicates[i][3][j][k] = [grounding,c]; // error here
     this.setState({predicates: predicates});
     ReactDOM.render(<ContextBoard predicates={predicates}></ContextBoard>, document.getElementById('grounding-container'));
+    console.log(predicates);
+
+  },
+
+  displayNL: function(){
+    var predicates = this.state.predicates;
+    var nls = this.state.nls;
+    for(var i = 0; i < predicates.length; i++) {
+      var predicate = predicates[i];
+      var str1 ="";
+
+      for(var j = 0; j < predicate[0].length; j++) {
+          var str2 = predicate[0][j].replace('--', '').replace(/~/gi, '').trim()+" ";
+          if(j!=predicate[0].length-1){
+            str2+=predicate[1][j]+" ";
+          }
+        str2=str2.split(" ");
+        console.log(str2);
+        console.log(predicate[3][j]);
+        for (var p in predicate[3][j]){
+          var index = predicate[3][j].indexOf(predicate[3][j][p]);
+          str2[index]=predicate[3][j][p][0];
+        }
+        str2=str2.join(" ");
+        str1+=str2;
+
+       }
+      str1=str1.substring(0,str1.lastIndexOf(" "))+" implies ";
+      var cons=predicate[2].replace('--', '').replace(/~/gi, '').split(" ");
+      console.log(cons);
+      for(var c in predicate[3][20]){
+        var index = predicate[3][20].indexOf(predicate[3][20][c]);
+        cons[index]=predicate[3][20][c][0];
+
+      }
+      cons=cons.join(" ");
+      str1+=cons;
+      str1=str1.replace('- ', '').replace('-','');
+      str1=str1[0].toUpperCase() + str1.slice(1).trim()+".";
+      nls.push(str1);
+      console.log(str1);
+    }
+
+    this.setState({nls:nls});
+    ReactDOM.render(<NL nls={nls}></NL>, document.getElementById('nl-container'));
+
+
   },
   
   toggleLink: function() {
+    console.log('toggleLink ');
+
     var l = this.state.linkToggle;
     this.setState({linkToggle: !l});
   },
   
   toggleEdit: function() {
+    console.log('toggleEdit ');
+
     var ed = this.state.edit;
     ed = !ed;
     this.setState({edit: ed});
@@ -1173,6 +1416,9 @@ var PredicateManager = React.createClass({
       if(s > 1) {
         document.getElementById('context-title').style.display="inline-block";
         document.getElementById('grounding-container').style.display="inline-block";
+        document.getElementById('nl-title').style.display="inline-block";
+        document.getElementById('nl-container').style.display="inline-block";
+
       }
     }
     this.setState({step: s});
@@ -1188,6 +1434,9 @@ var PredicateManager = React.createClass({
     if (s < 2) {
       document.getElementById('context-title').style.display="none";
       document.getElementById('grounding-container').style.display="none";
+       document.getElementById('nl-title').style.display="none";
+        document.getElementById('nl-container').style.display="none";
+
       //this.setState({stepBtn:!this.state.stepBtn});
     }
     this.setState({step: s});
@@ -1215,6 +1464,8 @@ var PredicateManager = React.createClass({
   },
   
   render: function() {
+  console.log('Predicate Render ');
+
     var nextBtnStyle = { display: 'inline-block', marginRight: 10 };
     var prevBtnStyle = { display: 'inline-block', marginRight: 10 };
     var newRuleBtnStyle = {display: 'inline-block',marginLeft: 5, backgroundColor: '#4CAF50'};
@@ -1300,7 +1551,9 @@ var PredicateManager = React.createClass({
                     linkToggler={this.toggleLink}
                     toggleEdit={this.toggleEdit}
                     edit={this.state.edit}
-                    removePremise={this.removePremise}>
+                    removePremise={this.removePremise}
+                    resetPredicate={this.removePremise}
+                    displayNL={this.displayNL}>
                   </RuleComponent>
                   );
               }, this)
@@ -1311,6 +1564,11 @@ var PredicateManager = React.createClass({
                 <b id='context-title' style={{display: "none"}}><h4>Story Grounding</h4></b>
                 <br></br>
                 <div id='grounding-container'></div>
+              </div>
+              <div className='col-md-8 col-md-offset-2 text-center'>
+                <b id='nl-title' style={{display: "none"}}><h4>Natural Language Output</h4></b>
+                <br></br>
+                <div id='nl-container'></div>
               </div>
               <hr></hr>
             </div>
@@ -1361,9 +1619,31 @@ var ContextBoard = React.createClass({
           );
         }, this)
       }
-      </div>
+      </div>     
     );
   }
 });
+
+
+var NL = React.createClass({
+  render: function() {
+    var contextStyle = {textAlign: 'center'};
+    var nlsStyle = {textAlign: 'center', color: '#0099CC'};
+
+    return(
+      <div className="nls" style={contextStyle}>
+      {
+        this.props.nls.map(function(nl,i){
+          return (
+            <div style={nlsStyle}>{nl}</div>
+            );
+        }, this)
+      }
+      </div>
+      
+    );
+  }
+});
+
 
 window.PredicateManager = PredicateManager;

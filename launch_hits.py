@@ -1,4 +1,4 @@
-import argparse, json
+import argparse, json, os
 
 from boto.mturk.price import Price
 from boto.mturk.question import HTMLQuestion
@@ -23,14 +23,23 @@ if __name__ == '__main__':
   env = simpleamt.get_jinja_env(args.config)
   template = env.get_template(args.html_template)
 
+
   hit_ids = []
   for i, line in enumerate(args.input_json_file):
     hit_input = json.loads(line.strip())
-
+    print(line)
+    print('')
+    print(hit_input)
+    print('')
     # In a previous version I removed all single quotes from the json dump.
     # TODO: double check to see if this is still necessary.
     template_params = { 'input': json.dumps(hit_input) }
+    print(template_params)
+    print('')
+
     html = template.render(template_params)
+    print(html)
+
     html_question = HTMLQuestion(html, frame_height)
     hit_properties['question'] = html_question
 

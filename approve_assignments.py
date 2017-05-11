@@ -6,10 +6,13 @@ if __name__ == '__main__':
   args = parser.parse_args()
   mtc = simpleamt.get_mturk_connection_from_args(args)
 
+  for p in list(mtc.get_all_hits()):
+    print p.HITId
+
   approve_ids = []
   reject_ids = []
 
-  if args.hit_ids_file is None:
+  '''if args.hit_ids_file is None:
     parser.error('Must specify --hit_ids_file.')
 
   with open(args.hit_ids_file, 'r') as f:
@@ -40,5 +43,5 @@ if __name__ == '__main__':
       print 'Rejecting assignment %d / %d' % (idx + 1, len(reject_ids))
       mtc.reject_assignment(assignment_id, feedback='Invalid results')
   else:
-    print 'Aborting'
+    print 'Aborting'''
           
