@@ -49,10 +49,10 @@ var InstructionComponent = React.createClass({
 
             </p>
             <h4><span style={{'fontWeight': 'bold'}}>Your task has three steps:</span></h4>
-			
-			
+      
+      
             <li><b>Step 1- Choose The Best Ending:</b> You will be shown two alternative endings to the story. Choose the one that you think is the right ending to the story.
-            </li>	
+            </li> 
 
       <li><b>Step 2- Add General Logical Rules:</b> You should add a few general rules which logically explain your choice of ending in the previous step. Each rule is composed of a few left-hand-side premises and one right-hand-side consequence. Your rules should be as <b>general</b> as possible, something that is generally true no matter what the details of the story. You will add each rule in two steps:
           <ul style = {ulStyle}>
@@ -62,9 +62,9 @@ var InstructionComponent = React.createClass({
             </li>
           </ul>
       </li>
-			           
-            <li><b>Step 3 - Ground General Logical Rules to the Story:</b> Ground your general rules from Step 2 by linking parts of your logical rules to the phrases in either the story or your choice of ending in Step 1. </li>
-			
+                 
+            <li><b>Step 3 - Ground General Logical Rules to the Story:</b> Ground your general rules from Step 2 by linking parts of your logical rules to the phrases in either the story or your choice of ending in Step 1.  Do this by clicking on a premise, choosing the button corresponding to the phrase to be grounded, then clicking the phrase within the Story block above and see it populate. Click submit and the grounding should appear on the bottom. Click Show Natural Language to see the natural language of your rule. </li>
+      
           </ul>
         </div>
       );
@@ -121,21 +121,21 @@ var ExampleComponent = React.createClass({
           <h4><span style={{'fontWeight': 'bold'}}>Consider the following example:</span></h4>
           <p><b>Story Context:</b> "It was Karen's final performance in marching band. Karen was playing the snare drum in the band. She played Thriller and Radar Love. The performance was flawless."</p>
           <p><b>Ending 1:</b> "She was very proud of her performance."</p>
-		      <p><b>Ending 2:</b> "She was really ashamed of how it went."</p>
-			     <ul>
-      			 <li><b>Step 1- Choose the Best Ending: </b>Here we choose Ending 1 as it fits the logic of the story better.</li>
-      			 <li><b>Step 2- Add General Logical Rules: </b>
-      			
+          <p><b>Ending 2:</b> "She was really ashamed of how it went."</p>
+           <ul>
+             <li><b>Step 1- Choose the Best Ending: </b>Here we choose Ending 1 as it fits the logic of the story better.</li>
+             <li><b>Step 2- Add General Logical Rules: </b>
+            
                   <ul style = {ulStyle}>
                     <li><span style={mStyle}>(Someone</span> plays in <span style={rStyle}>something</span>) <b>and</b> (<span style={rStyle}>something</span> was flawless) <b> implies </b> (<span style={mStyle}>someone</span> is proud of <span style={rStyle}>something</span>)
-      				      </li>
+                    </li>
                   </ul>
               </li>     
-      			 <li><b>Step 3- Ground General Logical Rules to Story: </b>
-      			
+             <li><b>Step 3- Ground General Logical Rules to Story: </b>
+            
                     <ul style = {ulStyle}>
                       <li><span style={mStyle}>someone -> Karen</span></li>
-      				        <li><span style={rStyle}>something -> Performance</span></li>
+                      <li><span style={rStyle}>something -> Performance</span></li>
                     </ul>
               </li>
             </ul>

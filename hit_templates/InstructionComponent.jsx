@@ -63,7 +63,7 @@ var InstructionComponent = React.createClass({
           </ul>
       </li>
                  
-            <li><b>Step 3 - Ground General Logical Rules to the Story:</b> Ground your general rules from Step 2 by linking parts of your logical rules to the phrases in either the story or your choice of ending in Step 1. </li>
+            <li><b>Step 3 - Ground General Logical Rules to the Story:</b> Ground your general rules from Step 2 by linking parts of your logical rules to the phrases in either the story or your choice of ending in Step 1.  Do this by clicking on a premise, choosing the button corresponding to the phrase to be grounded, then clicking the phrase within the Story block above and see it populate. Click submit and the grounding should appear on the bottom. Click Show Natural Language to see the natural language of your rule. </li>
       
           </ul>
         </div>
