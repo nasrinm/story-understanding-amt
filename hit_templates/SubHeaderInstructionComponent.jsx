@@ -35,14 +35,14 @@ var SubHeaderInstructionComponent = React.createClass({
     }
     return (
       <div className="col-md-8">
-        <h3><b>{"Step: " + (this.props.step+1) + " " + header}</b></h3>
-        <ol >
+        <h4><b>{"Step " + (this.props.step+1) + ": " + header}</b></h4>
+        <ul >
         {
           instructions.map(function(bullet,i) {
             return(<li key={i}>{bullet}</li>);
           })
         }
-        </ol>
+        </ul>
       </div>
     );
   }
