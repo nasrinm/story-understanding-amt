@@ -102,5 +102,5 @@ python disable_hit.py --hit_id THE_HIT_ID_YOU_WANT_TO_DISABLE
 To run the HIT on the production AMT site, simply append a `--prod` flag to each of the python calls in each sh script.
 
 ## References
-[0] Story Cloze Evaluation Test http://research.microsoft.com/en-us/um/people/pkohli/papers/cloze_test_naacl2016.pdf <br />
-[1] Rocstories Corpus http://cs.rochester.edu/nlp/rocstories/
+[0] The paper to cite: http://www.anthology.aclweb.org/N/N16/N16-1098.pdf  <br />
+[1] ROCStories project webpage: http://cs.rochester.edu/nlp/rocstories/
