@@ -1,7 +1,6 @@
-// Parameters
-var stopWordList = "a about above across after again against almost alone along already also although always an and another any as ask asked asking asks at away b back backed backing backs be became because become becomes been before began behind being beings best better between big both but by c came can cannot case cases certain certainly clear clearly come could d did differ different differently do does done down down downed downing downs during e each early either end ended ending ends enough even evenly ever f face faces fact facts far felt few find finds for four full fully further furthered furthering furthers g gave general generally get gets give given gives go going good goods got great greater greatest group h had has have having here herself high high high higher highest how however if important in interest interested interesting interests into is it its itself j just k keep keeps kind knew know known knows l large largely last later latest least less let lets like likely long longer longest m made make making might more most mostly mr mrs much must n necessary need needed needing needs never new new newer newest next not now number numbers o of off often old older oldest on only open opened opening opens or order ordered ordering orders other others our out over p part parted parting parts per perhaps place places point pointed pointing points possible present presented presenting presents put puts q quite r rather really right right room rooms s said same saw say says second seconds see seem seemed seeming seems sees several shall should show showed showing shows side sides since small smaller smallest so some states still still such sure t take taken than that the then there therefore think thinks though thought thoughts three through thus to today too took toward turn turned turning turns two u under until up upon use used uses v very w want wanted wanting wants was way ways well wells went were what when where whether which while who whole whose why will with within without work worked working works would x y year years yet you young younger youngest z";
+var stopWordList = "-- a about above across after again against almost alone along already also although always an and another any as ask asked asking asks at away b back backed backing backs be became because become becomes been before began behind being beings best better between big both but by c came can cannot case cases certain certainly clear clearly come could d did differ different differently do does done down down downed downing downs during e each early either end ended ending ends enough even evenly ever f face faces fact facts far felt few find finds for four full fully further furthered furthering furthers g gave general generally get gets give given gives go going good goods got great greater greatest group h had has have having here herself high high high higher highest how however if important in interest interested interesting interests into is it its itself j just k keep keeps kind knew know known knows l large largely last later latest least less let lets like likely long longer longest m made make making might more most mostly mr mrs much must n necessary need needed needing needs never new new newer newest next not now number numbers o of off often old older oldest on only open opened opening opens or order ordered ordering orders other others our out over p part parted parting parts per perhaps place places point pointed pointing points possible present presented presenting presents put puts q quite r rather really right right room rooms s said same saw say says second seconds see seem seemed seeming seems sees several shall should show showed showing shows side sides since small smaller smallest so some states still still such sure t take taken than that the then there therefore think thinks though thought thoughts three through thus to today too took toward turn turned turning turns two u under until up upon use used uses v very w want wanted wanting wants was way ways well wells went were what when where whether which while who whole whose why will with within without work worked working works would x y year years yet you young younger youngest z";
 var defaultObjects = ["someone", "something", "somewhere"];
-var defaultPrepositions =["about","after","along","at","but","by","before","during","for", "from", "in","into","on","of","to","with","without", "-"]
+var defaultPrepositions =["about","after","along","at","but","by","before","during","for", "from", "in","into","on","of","to","with","without", "--"]
 
 
 var FooterInstructionComponent = window.FooterInstructionComponent;
@@ -33,33 +32,55 @@ var PrepphraseComponent = React.createClass({
              prepositionType: '',
              prepositionSubject: '',
              prepositionTypeDefault: pt,
-             prepositionSubjectDefault: ps
+             prepositionSubjectDefault: ps,
+             customTypeText: '',
+             customSubjectText: ''
             }
   },
   
   prepositionSubjectChangeHandler: function(event){
     if(event.target.value == 'customOption') {
-      this.setState({customSubject: true, prepositionSubject: event.target.value});
+      this.setState({customSubject: true});
     }
-    this.setState({prepositionSubject: event.target.value});
+    else{
+      this.setState({customSubject: false, prepositionSubject: event.target.value});
+    }
     //ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={6} />, document.getElementById('footer-instructions'));
   },
+
+
+
+  prepositionCustomSubjectChangeHandler: function(event){
+      if(event.target.value.length > 0) {   
+        this.setState({prepositionSubject: event.target.value, customSubjectText: event.target.value});
+      }
+    },
   
   prepositionTypeChangeHandler: function(event){
 
     if(event.target.value != '--') {
       if(event.target.value == 'customOption') {
-        this.setState({customType: true, prepositionType: event.target.value});
+        this.setState({showSubject:true, customType: true});
+      } else { 
+        this.setState({showSubject: true, customType: false, prepositionType: event.target.value});
       }
-
-      this.setState({showSubject: true, prepositionType: event.target.value});
 
 
     } else {
-      this.setState({showSubject: false, prepositionType: event.target.value});
+      this.setState({showSubject: false, customType: false, prepositionType: event.target.value});
     }
+
     //ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={6} />, document.getElementById('footer-instructions'));
   },
+
+
+  prepositionCustomTypeChangeHandler: function(event){
+      if(event.target.value.length > 0) {   
+        this.setState({prepositionType: event.target.value, customTypeText: event.target.value});
+
+      }
+    },
+
   
   getPrepPhrase: function() {
     var d = {};
@@ -77,26 +98,8 @@ var PrepphraseComponent = React.createClass({
   render: function() {
 
     var wrapStyle = { display: 'inline-block', marginBottom: 15};
-    var customStyle = { display: 'inline-block', margin: 5, marginBottom: -5, width:'auto' };
-    var divStyle = { display: 'inline-block', marginRight: 5, marginBottom: -5, width:'auto', width:105 };
-    
-    if(this.state.prepositionTypeDefault == "" || this.state.prepositionTypeDefault == null) { // fix
-      var prepositionTypeDefault = "preposition";
-      var prepositionTypeDefaultValue = "";
-    } else {
-      var prepositionTypeDefault = this.state.prepositionTypeDefault;
-      var prepositionTypeDefaultValue = this.state.prepositionTypeDefault;
-    }
-    if(this.state.prepositionSubjectDefault == "" || this.state.prepositionSubjectDefault == null) {
-      var prepositionSubjectDefault = "subject";
-      var prepositionSubjectDefaultValue = "";
-    } else {
-      var prepositionSubjectDefault = this.state.prepositionSubjectDefault;
-      var prepositionSubjectDefaultValue = this.state.prepositionSubjectDefault;
-    }
-    
-    var prepositionSubjectStyle = { display: 'inline-block', marginRight: 5, marginBottom: -5, width:'auto' };
-    var prepositionTypeStyle = { display: 'inline-block', marginRight: 5, marginBottom: -5, width:'auto' };
+    var divStyle = { marginRight: 5, marginBottom: -5, width:'auto', width:100 };
+    var prepCustomStyle = { marginRight: 5, marginBottom: -5, height: 32, width:75, position: 'absolute'};
 
     var subjectShowState = '';
     if(this.state.showSubject == true) {
@@ -104,15 +107,64 @@ var PrepphraseComponent = React.createClass({
     } else {
       subjectShowState = 'disabled'
     }
-    
+
+    var prepositionTypeDefault = "preposition";
+    if(this.state.prepositionType==''){
+      var prepositionTypeValue = "preposition" ;
+    } else{
+      if(this.state.customType){
+        var prepositionTypeValue = 'customOption';
+      } else{
+        var prepositionTypeValue = this.state.prepositionType;
+      }
+    }
+
+    var prepositionSubjectDefault = "subject";
+    if(this.state.prepositionSubject==''){
+      var prepositionSubjectValue = "subject" ;
+    } else{
+      if(this.state.customSubject){
+        var prepositionSubjectValue = 'customOption';
+      } else{
+        var prepositionSubjectValue = this.state.prepositionSubject;
+      }
+    }
+  
+    var customOptionTypeText = '' ;
+    var customOptionTypeTextInput='';
+    var customOptionSubjectText = '';
+    var customOptionSubjectTextInput='';
+
+    if(this.state.customTypeText.length>0){
+
+      customOptionTypeText=this.state.customTypeText;
+      customOptionTypeTextInput=this.state.customTypeText;
+    } else {
+        customOptionTypeText = '[custom]';
+    }
+
+    if(this.state.customSubjectText.length>0){
+      customOptionSubjectText=this.state.customSubjectText;
+      customOptionSubjectTextInput=this.state.customSubjectText;
+    } else {
+      customOptionSubjectText = '[custom]';
+    }
+
+    console.log(prepositionTypeValue)
+    console.log(this.state.prepositionType)
+    console.log(prepositionSubjectValue)
+    console.log(this.state.prepositionSubject)
+
     if(this.state.editing == true) {
       if(this.state.customSubject == false) {
           if(this.state.customType == false) {
 
             return(
               <span style={wrapStyle}>
-                <select className='soflow' ref='prepositionType' defaultValue={prepositionTypeDefaultValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
-                  <option value={prepositionTypeDefaultValue} disabled>{prepositionTypeDefault}</option>
+                <div style={wrapStyle}>
+
+                <select className='soflow' ref='prepositionType' value={prepositionTypeValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
+                  <option value="preposition" disabled>{prepositionTypeDefault}</option>
                   <option value="~about">about</option>
                   <option value="~after">after</option>
                   <option value="~along">along</option>
@@ -126,42 +178,70 @@ var PrepphraseComponent = React.createClass({
                   <option value="~under">under</option>
                   <option value="~with">with</option>
                   <option value="~without">without</option>
-                  <option value="customOption">[custom object]</option>
+                  <option value="customOption">{customOptionTypeText}</option>
                   <option value="--">--</option>
-
                 </select>
-                
-                <select className='soflow' ref='prepositionSubject' defaultValue={prepositionSubjectDefaultValue} onChange={this.prepositionSubjectChangeHandler} style={prepositionSubjectStyle} disabled = {subjectShowState}>
-                  <option value={prepositionSubjectDefaultValue} disabled>{prepositionSubjectDefault}</option>
+              </div>
+              <div style={wrapStyle}>
+
+                <select className='soflow' ref='prepositionSubject' value={prepositionSubjectValue} onChange={this.prepositionSubjectChangeHandler} style={divStyle} disabled = {subjectShowState}>
+                  <option value="subject" disabled>{prepositionSubjectDefault}</option>
                   <option value="someone">someone</option>
                   <option value="something">something</option>
                   <option value="somewhere">somewhere</option>
                   <option value="customOption">[custom object]</option>
                 </select>
-              </span>
+              </div>
+          </span>
+
             );
+              
+            
           } else {
             return(
             <span style={wrapStyle}>
-                <textarea ref='prepositionType' rows="1" maxLength="50" cols="15" placeholder="preposition" onChange={this.prepositionTypeChangeHandler} defaultValue={prepositionTypeDefaultValue} style={prepositionTypeStyle}></textarea>
-
-                <select className='soflow' ref='prepositionSubject' defaultValue={prepositionSubjectDefaultValue} onChange={this.prepositionSubjectChangeHandler} style={prepositionSubjectStyle} disabled = {subjectShowState}>
-                  <option value={prepositionSubjectDefaultValue} disabled>{prepositionSubjectDefault}</option>
+             <div style={wrapStyle}>
+                <input ref='prepositionTypeCustom' rows="1" maxLength="50" cols="15" placeholder={customOptionTypeTextInput} onChange={this.prepositionCustomTypeChangeHandler} style={prepCustomStyle}></input>
+                <select className='soflow' ref='prepositionType' value={prepositionTypeValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
+                  <option value="preposition" disabled>preposition</option>
+                  <option value="~about">about</option>
+                  <option value="~after">after</option>
+                  <option value="~along">along</option>
+                  <option value="~at">at</option>
+                  <option value="~before">before</option>
+                  <option value="~by">by</option>
+                  <option value="~for">for</option>
+                  <option value="~from">from</option>
+                  <option value="~in">in</option>
+                  <option value="~on">on</option>
+                  <option value="~under">under</option>
+                  <option value="~with">with</option>
+                  <option value="~without">without</option>
+                  <option value="customOption" selected>{customOptionTypeText}</option>
+                  <option value="--">--</option>
+                </select>
+             </div>
+             <div style={wrapStyle}>
+                <select className='soflow' ref='prepositionSubject'   value={prepositionSubjectValue} onChange={this.prepositionSubjectChangeHandler} style={divStyle} disabled = {subjectShowState}>
+                  <option value="subject" disabled>{prepositionSubjectDefault}</option>
                   <option value="someone">someone</option>
                   <option value="something">something</option>
                   <option value="somewhere">somewhere</option>
                   <option value="customOption">[custom object]</option>
                 </select>
-              </span>
+              </div>
+          </span>
+
             );
         }
       } else {
          if(this.state.customType == false) {
 
           return(
-            <span style={wrapStyle}>
-              <select className='soflow' ref='prepositionType' defaultValue={prepositionTypeDefaultValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
-                <option value={prepositionTypeDefaultValue} disabled>{prepositionTypeDefault}</option>
+          <span style={wrapStyle}>
+            <div style={wrapStyle}>
+              <select className='soflow' ref='prepositionType' value={prepositionTypeValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
+                <option value="preposition" disabled>{prepositionTypeDefault}</option>
                 <option value="about">about</option>
                 <option value="after">after</option>
                 <option value="along">along</option>
@@ -175,19 +255,59 @@ var PrepphraseComponent = React.createClass({
                 <option value="under">under</option>
                 <option value="with">with</option>
                 <option value="without">without</option>
+                <option value="customOption">{customOptionTypeText}</option>
                 <option value="--">--</option>
               </select>
-            
-              <textarea ref='prepositionSubject' rows="1" maxLength="50" cols="15" placeholder="subject" onChange={this.prepositionSubjectChangeHandler} defaultValue={prepositionSubjectDefaultValue} style={prepositionSubjectStyle} disabled = {subjectShowState}></textarea>
-            </span>
+           </div>
+           <div style={wrapStyle}>
+              <input ref='prepositionSubjectCustom' rows="1" maxLength="50" cols="15" placeholder={customOptionSubjectTextInput} onChange={this.prepositionCustomSubjectChangeHandler}  style={prepCustomStyle} disabled = {subjectShowState}></input>
+              <select className='soflow' ref='prepositionSubject' value={prepositionSubjectValue}  onChange={this.prepositionSubjectChangeHandler} style={divStyle} disabled = {subjectShowState}>
+                <option value="subject" disabled>{prepositionSubjectDefault}</option>
+                <option value="someone">someone</option>
+                <option value="something">something</option>
+                <option value="somewhere">somewhere</option>
+                <option value="customOption" selected>{customOptionSubjectText}</option>
+              </select>
+            </div>
+         </span>
+
           );
         } else {
             return (
-              <span style={wrapStyle}>
+            <span style={wrapStyle}>
+              <div style={wrapStyle}>
+                <input ref='prepositionTypeCustom' rows="1" maxLength="50" cols="15" placeholder={customOptionTypeTextInput} onChange={this.prepositionCustomTypeChangeHandler} style={prepCustomStyle}></input>
+                <select className='soflow' ref='prepositionType' value={prepositionTypeValue} onChange={this.prepositionTypeChangeHandler} style={divStyle}>
+                  <option value="preposition" disabled>{prepositionTypeDefault}</option>
+                  <option value="about">about</option>
+                  <option value="after">after</option>
+                  <option value="along">along</option>
+                  <option value="at">at</option>
+                  <option value="before">before</option>
+                  <option value="by">by</option>
+                  <option value="for">for</option>
+                  <option value="from">from</option>
+                  <option value="in">in</option>
+                  <option value="on">on</option>
+                  <option value="under">under</option>
+                  <option value="with">with</option>
+                  <option value="without">without</option>
+                  <option value="customOption">{customOptionTypeText}</option>
+                  <option value="--">--</option>
+                </select>
+              </div>
+              <div style={wrapStyle}>
+                <input ref='prepositionSubjectCustom' rows="1" maxLength="50" cols="15" placeholder={customOptionSubjectTextInput} onChange={this.prepositionCustomSubjectChangeHandler} style={prepCustomStyle} disabled = {subjectShowState}></input>
+                <select className='soflow' ref='prepositionSubject' value={this.state.prepositionSubject} value={prepositionSubjectValue} onChange={this.prepositionSubjectChangeHandler} style={divStyle} disabled = {subjectShowState}>
+                  <option value="subject" disabled>{prepositionSubjectDefault}</option>
+                  <option value="someone">someone</option>
+                  <option value="something">something</option>
+                  <option value="somewhere">somewhere</option>
+                  <option value="customOption" selected>{customOptionSubjectText}</option>
+                </select>
+              </div>
+            </span>
 
-                <textarea ref='prepositionType' rows="1" maxLength="50" cols="15" placeholder="preposition" onChange={this.prepositionTypeChangeHandler} defaultValue={prepositionTypeDefaultValue} style={prepositionTypeStyle} ></textarea>
-                <textarea ref='prepositionSubject' rows="1" maxLength="50" cols="15" placeholder="subject" onChange={this.prepositionSubjectChangeHandler} defaultValue={prepositionSubjectDefaultValue} style={prepositionSubjectStyle} disabled = {subjectShowState}></textarea>
-              </span>
             );
 
         }
@@ -195,7 +315,7 @@ var PrepphraseComponent = React.createClass({
     } else {
       return(
         <span style={wrapStyle}>
-          {this.props.prepositionTypeDefault} + " " + {this.props.prepositionSubjectDefault}
+          {this.state.prepositionType} + " " + {this.state.prepositionSubject}
         </span>
       );
     }
@@ -208,7 +328,8 @@ React component containing rendered consequence
 var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   getInitialState: function() {
 
-             var prepdefaultValue ='';
+    var prepdefaultValue ='';
+
     return { 
              linking: false, // are we currently linking?
              linkList: [],   // words
@@ -216,7 +337,13 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
              colors:{},      // array of color links
              customSubject:false,
              customObject:false,
-             prep: prepdefaultValue
+             prep: prepdefaultValue,
+             consequenceSubject:'',
+             consequenceObject:'',
+             consequenceSubjectDefault:'',
+             consequenceObjectDefault:'',
+             customSubjectText:'',
+             customObjectText:''
             }
   },
 
@@ -234,7 +361,7 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   
   link: function(i) {
     var word = this.state.linkList[i];
-    this.refs.linked_element.value = word;
+    this.refs.linked_element.value = word.replace(/~/gi, '');
     this.setState({i: i});
   },
 
@@ -261,6 +388,9 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
     d['cPredicate'] = this.refs.consequencePredicate.value.trim();
     d['cSubject'] = this.refs.consequenceSubject.value.trim();
     d['cObject'] = this.refs.consequenceObject.value.trim();
+    if(d['cObject']=='object'){
+      d['cObject'] = "";
+    }
     d['cPrepType'] = this.refs.cpcomp.getPrepPhrase()['pType'];
     d['cPrepObject'] = this.refs.cpcomp.getPrepPhrase()['pObject'];
 
@@ -286,15 +416,39 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   subjectChange: function(event){
     if(event.target.value == 'customOption') {
       this.setState({customSubject: true});
+    } else {
+      this.setState({customSubject: false, consequenceSubject:event.target.value});
     }
+    console.log(event.target.value)
+    console.log(this.state.consequenceSubject)
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={5} />, document.getElementById('footer-instructions'));
   },
+
+  subjectCustomChange: function(event){
+    if(event.target.value.length > 0) {   
+        this.setState({customSubjectText: event.target.value, consequenceSubject:event.target.value});
+    }
+    console.log(event.target.value)
+    console.log(this.state.consequenceSubject)
+  },
+
   objectChange: function(event){
+
     if(event.target.value == 'customOption') {
       this.setState({customObject: true});
+    } else {
+      this.setState({customObject: false, consequenceObject:event.target.value});
     }
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={6} />, document.getElementById('footer-instructions'));
   },
+
+  objectCustomChange: function(event){
+    if(event.target.value.length > 0) {   
+      this.setState({customObjectText: event.target.value, consequenceObject:event.target.value});
+
+    }  
+  },
+
   predicateChange: function() {
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={7} />, document.getElementById('footer-instructions'));
   },
@@ -305,6 +459,8 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
     var wrapStyle = { display: 'inline-block' };
     var linkedElementStyle = { display: 'inline-block', width: 50, overflow:'hidden', marginBottom:-8, marginLeft:5 };
     var divStyle = { display: 'inline-block', margin: 5, marginBottom: -5, width:'auto' };
+    var CustomStyle = { marginRight: 5, marginBottom: -5, height: 32, width:80, position: 'absolute'};
+
     var linkStyle = {marginTop: 40, textAlign: 'center' };
     var inlineBlock = { marginLeft:10 };
     var s = this.props.step;
@@ -316,34 +472,86 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
       groundBtnStyle['display'] = '';
     }
     
-    if(this.props.consequenceSubjectDefault != "") {
-      var consequenceSubjectDefault = this.props.consequenceSubjectDefault;
-    } else {
-      var consequenceSubjectDefault = "subject"
+    var consequenceSubjectDefault = "subject";
+    if(this.state.consequenceSubject==''){
+      var consequenceSubjectValue = "subject" ;
+    } else{
+      if(this.state.customSubject){
+        var consequenceSubjectValue = 'customOption';
+      } else{
+        var consequenceSubjectValue = this.state.consequenceSubject;
+      }
     }
-    if(this.props.consequenceObjectDefault != "") {
-      var consequenceObjectDefault = this.props.consequenceObjectDefault;
-    } else {
-      var consequenceObjectDefault = "object"
+    
+    var consequenceObjectDefault = "object";
+    if(this.state.consequenceObject==''){
+      var consequenceObjectValue = "object" ;
+    } else{
+      if(this.state.customObject){
+        var consequenceObjectValue = 'customOption';
+      } else{
+        var consequenceObjectValue = this.state.consequenceObject;
+      }
     }
+
+
+    var customOptionSubjectText = '' ;
+    var customOptionSubjectTextInput='';
+    var customOptionObjectText = '';
+    var customOptionObjectTextInput='';
+
+    if(this.state.customSubjectText.length>0){
+      customOptionSubjectText=this.state.customSubjectText;
+      customOptionSubjectTextInput=this.state.customSubjectText;
+    } else {
+        customOptionSubjectText = '[custom]';
+    }
+
+    if(this.state.customObjectText.length>0){
+      customOptionObjectText=this.state.customObjectText;
+      customOptionObjectTextInput=this.state.customObjectText;
+    } else {
+      customOptionObjectText = '[custom]'
+    }
+
+
+    console.log(consequenceSubjectValue)
+    console.log(this.state.consequenceSubject)
+    console.log(consequenceObjectValue)
+    console.log(this.state.consequenceObject)
+
+
     
     if(this.props.edit == true) {
       if(this.state.customSubject == true && this.state.customObject == false) {
         return(
           <span className='consequence-container' style={inlineBlock}>
-            <textarea ref='consequenceSubject' rows="1" maxLength="50" cols="10" placeholder="subject" defaultValue={this.props.consequenceSubjectDefault} style={divStyle}></textarea>
-            
-            <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
-            
-            <select className='soflow' ref='consequenceObject' defaultValue={consequenceObjectDefault} onChange={this.objectChange}>
-              <option value={consequenceObjectDefault} disabled>{consequenceObjectDefault}</option>
+          <div style={wrapStyle}>
+
+            <input ref='consequenceSubjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionSubjectTextInput} onChange={this.subjectCustomChange}  style={CustomStyle}></input>
+            <select className='soflow' ref='consequenceSubject' value={this.state.consequenceSubject} value={consequenceSubjectValue} onChange={this.subjectChange}>
+              <option value="subject" disabled>{consequenceSubjectDefault}</option>
               <option value="someone">someone</option>
               <option value="something">something</option>
               <option value="somewhere">somewhere</option>
-              <option value="-">-</option>
+              <option value="customOption" selected>{customOptionSubjectText}</option>
+            </select>
+          </div>
+
+          <div style={wrapStyle}>
+            <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
+          </div>
+ 
+          <div style={wrapStyle}> 
+            <select className='soflow' ref='consequenceObject' value={consequenceObjectValue} onChange={this.objectChange}>
+              <option value="object" disabled>{consequenceObjectDefault}</option>
+              <option value="someone">someone</option>
+              <option value="something">something</option>
+              <option value="somewhere">somewhere</option>
+              <option value="--">--</option>
               <option value="customOption">[custom object]</option>
             </select>
-
+          </div>
             <PrepphraseComponent
                   ref='cpcomp'
                   editing={true}
@@ -354,17 +562,30 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
       } else if (this.state.customSubject == false && this.state.customObject == true) {
         return(
           <span className='consequence-container' style={inlineBlock}>
-            <select className='soflow' ref='consequenceSubject' defaultValue={consequenceSubjectDefault} onChange={this.subjectChange}>
-              <option value={consequenceSubjectDefault} disabled>{consequenceSubjectDefault}</option>
+            <div style={wrapStyle}>
+            <select className='soflow' ref='consequenceSubject' value={consequenceSubjectValue} onChange={this.subjectChange}>
+              <option value="subject" disabled>{consequenceSubjectDefault}</option>
               <option value="someone">someone</option>
               <option value="something">something</option>
               <option value="somewhere">somewhere</option>
               <option value="customOption">[custom object]</option>
             </select>
+            </div>
+            <div style={wrapStyle}>
+              <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
+            </div>            
+            <div style={wrapStyle}>
+              <input ref='consequenceObjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionObjectTextInput} onChange={this.objectCustomChange} style={CustomStyle}></input>
+              <select className='soflow' ref='consequenceObject' value={this.state.consequenceObject} value={consequenceObjectValue} onChange={this.objectChange}>
+                <option value="object" disabled>{consequenceObjectDefault}</option>
+                <option value="someone">someone</option>
+                <option value="something">something</option>
+                <option value="somewhere">somewhere</option>
+                <option value="--">--</option>
+                <option value="customOption" selected>{customOptionObjectText}</option>
+              </select>
+            </div>
             
-            <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
-            
-            <textarea ref='consequenceObject' rows="1" maxLength="50" cols="10" placeholder="object" defaultValue={this.props.consequenceObjectDefault} style={divStyle}></textarea>
             <PrepphraseComponent
                   ref='cpcomp'
                   editing={true}
@@ -375,12 +596,31 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
       } else if (this.state.customSubject == true && this.state.customObject == true) {
         return(
           <span className='consequence-container' style={inlineBlock}>
-            <textarea ref='consequenceSubject' rows="1" maxLength="50" cols="10" placeholder="subject" defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
-            
-            <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
-            
-            <textarea ref='consequenceObject' rows="1" maxLength="50" cols="10" placeholder="object" defaultValue={this.props.consequenceObjectDefault} style={divStyle}></textarea>
-          
+            <div style={wrapStyle}>
+              <input ref='consequenceSubjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionSubjectTextInput} onChange={this.subjectCustomChange} style={CustomStyle}></input>
+              <select className='soflow' ref='consequenceSubject' value={consequenceSubjectValue} onChange={this.subjectChange}>
+                <option value="subject" disabled>{consequenceSubjectDefault}</option>
+                <option value="someone">someone</option>
+                <option value="something">something</option>
+                <option value="somewhere">somewhere</option>
+                <option value="customOption" selected>{customOptionSubjectText}</option>
+              </select>
+            </div> 
+            <div style={wrapStyle}>
+              <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
+            </div>
+            <div style={wrapStyle}>
+              <input ref='consequenceObjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionObjectTextInput}  onChange={this.objectCustomChange} style={CustomStyle}></input>
+              <select className='soflow' ref='consequenceObject' value={consequenceObjectValue} onChange={this.objectChange}>
+                <option value="object" disabled>{consequenceObjectDefault}</option>
+                <option value="someone">someone</option>
+                <option value="something">something</option>
+                <option value="somewhere">somewhere</option>
+                <option value="--">--</option>
+                <option value="customOption" selected>{customOptionObjectText}</option>
+              </select>
+            </div>
+
             <PrepphraseComponent
                   ref='cpcomp'
                   editing={true}
@@ -392,24 +632,28 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
       } else {
         return(
           <span className='consequence-container' style={inlineBlock}>
-            <select className='soflow' ref='consequenceSubject' defaultValue={consequenceSubjectDefault} onChange={this.subjectChange}>
-              <option value={consequenceSubjectDefault} disabled>{consequenceSubjectDefault}</option>
+            <div style={wrapStyle}>
+            <select className='soflow' ref='consequenceSubject' value={consequenceSubjectValue} onChange={this.subjectChange}>
+              <option value="subject" disabled>{consequenceSubjectDefault}</option>
               <option value="someone">someone</option>
               <option value="something">something</option>
               <option value="somewhere">somewhere</option>
-              <option value="customOption">[custom object]</option>
+              <option value="customOption">[custom]</option>
             </select>
-            
-            <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
-            
-            <select className='soflow' ref='consequenceObject' defaultValue={consequenceObjectDefault} onChange={this.objectChange}>
-              <option value={consequenceObjectDefault} disabled>{consequenceObjectDefault}</option>
+            </div>
+            <div style={wrapStyle}>
+              <textarea ref='consequencePredicate' rows="1" maxLength="50" cols="15" placeholder="consequence" onChange={this.predicateChange} defaultValue={this.props.consequencePredicateDefault} style={divStyle}></textarea>
+            </div>
+            <div style={wrapStyle}>
+            <select className='soflow' ref='consequenceObject' value={consequenceObjectValue} onChange={this.objectChange}>
+              <option value="object" disabled>{consequenceObjectDefault}</option>
               <option value="someone">someone</option>
               <option value="something">something</option>
               <option value="somewhere">somewhere</option>
-              <option value="customOption">[custom object]</option>
+              <option value="--">--</option>
+              <option value="customOption">[custom]</option>
             </select>
-
+            </div>
 
 
           <PrepphraseComponent
@@ -494,23 +738,75 @@ var PremiseComponent = React.createClass({
              linking: false,                // are we linking this premise?
              linkList: [],                  // list of words
              i:-1,                          // index for linked word
-             colors: []                     // set of colors for linked words
+             colors: [],                     // set of colors for linked words
+             premiseSubject:'',
+             premiseObject:'',
+             premiseSubjectDefault:'',
+             premiseObjectDefault:'',
+             customSubjectText:'',
+             customObjectText:''
             }
   },
   
   getAction: function() {
+
     if(this.state.customValue == true){
       var actionSubject = this.refs.actionSubject.value;
       var actionPredicate = this.refs.actionPredicate.value;
       var actionObject = this.refs.actionObject.value;
+      if(actionObject=='object'){
+        actionObject="";
+      }
       var prepPhrase = this.refs.ppcomp.getPrepPhrase();
-
-      return(actionSubject + " " + actionPredicate + " " + actionObject + " " + prepPhrase['pType'] + " " + prepPhrase['pObject']);
+ return(actionSubject + " " + actionPredicate + " " + actionObject + " " + prepPhrase['pType'] + " " + prepPhrase['pObject']);
     } else {
-      return(this.state.act.trim() + " " + this.state.prep.trim());
+
+      if(this.state.act.trim().split(" ")[this.state.act.trim().length-1]="object"){
+        var newact=this.state.act.trim().substring(0,this.state.act.trim().indexOf("object")).trim();
+        return(newact + " " + this.state.prep.trim());
+
+      }
+ return(this.state.act.trim() + " " + this.state.prep.trim());
     }
 
 
+  },
+
+
+  actionCheck: function (){
+    var actionsTest = [] 
+    if(this.state.customValue == true){
+      var actionSubject = this.refs.actionSubject.value;
+      var actionPredicate = this.refs.actionPredicate.value;
+      var actionObject = this.refs.actionObject.value;
+
+      if(actionSubject=='subject'){
+        actionSubject="";
+      }
+
+      if(actionObject=='object'){
+        actionObject="";
+      }
+
+      actionsTest.push(actionSubject.length>0);
+      actionsTest.push(actionPredicate.length>0);
+      actionsTest.push(actionObject.length>0);
+
+
+    } else {
+
+      var actionTextString = this.state.act.substring(0,this.state.act.indexOf('--')).trim();
+      var actionSubject = actionTextString.split(" ")[0];
+      var actionPredicate = actionTextString.substring(actionTextString.indexOf(" "),actionTextString.indexOf(actionTextString.split(" ")[actionTextString.split(" ").length-1])).trim();
+      var actionObject = actionTextString.split(" ")[actionTextString.split(" ").length-1];
+
+
+      actionsTest.push(actionSubject.length>0);
+      actionsTest.push(actionPredicate.length>0);
+      actionsTest.push(actionObject.length>0);
+    }
+
+    return(actionsTest)
   },
 
   getOp: function() {
@@ -539,8 +835,7 @@ var PremiseComponent = React.createClass({
   setLink: function() { // i, j, grounding jth word of ith action
     if(this.props.alreadyLinking == false) {
       this.setState({linking: true});
-      var action = this.getAction();
-      console.log(action)
+      var action = this.state.act.trim()+" " +this.state.prep.trim()
       this.setState({linkList: action.trim().split(" ")});
       $('#story').removeClass('noselect');
       $('#story').removeAttr( "disabled" )
@@ -587,7 +882,7 @@ var PremiseComponent = React.createClass({
 
   resetPremise: function(){
 
-    //this.setState(this.getInitialState());
+    this.setState(this.getInitialState());
     this.refs.actionPredicate.value = '';
     this.refs.actionSubject.value='subject';
     this.refs.actionObject.value='object';
@@ -600,26 +895,46 @@ var PremiseComponent = React.createClass({
     }
 
     this.forceUpdate();
-
-
   },
 
-  subjectChange: function(event){
+
+subjectChange: function(event){
     if(event.target.value == 'customOption') {
       this.setState({customSubject: true});
-    }
-    ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={2} />, document.getElementById('footer-instructions'));
-    console.log('Premise subjectChange');
+    } else {
+      this.setState({customSubject: false, premiseSubject:event.target.value});
+      ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={2} />, document.getElementById('footer-instructions'));
 
+    }
   },
+
+  subjectCustomChange: function(event){
+    if(event.target.value.length > 0) {   
+        this.setState({customSubjectText: event.target.value, premiseSubject:event.target.value});
+        ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={2} />, document.getElementById('footer-instructions'));
+
+    }
+  },
+
   objectChange: function(event){
+
     if(event.target.value == 'customOption') {
       this.setState({customObject: true});
+    } else {
+      this.setState({customObject: false, premiseObject:event.target.value});
+      ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={3} />, document.getElementById('footer-instructions'));
+
     }
-    ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={3} />, document.getElementById('footer-instructions'));
-
-
   },
+
+  objectCustomChange: function(event){
+    if(event.target.value.length > 0) {   
+      this.setState({customObjectText: event.target.value, premiseObject:event.target.value});
+      ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={3} />, document.getElementById('footer-instructions'));
+
+    }  
+  },
+
   predicateChange: function() {
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={4} />, document.getElementById('footer-instructions'));
 
@@ -636,6 +951,8 @@ var PremiseComponent = React.createClass({
     var formStyle = { width:120, marginRight: 50 };
     var removePremiseStyle = {marginTop: -20};
     var selectStyle = {}
+    var CustomStyle = { marginRight: 5, marginBottom: -5, height: 32, width:80, position: 'absolute'};
+
     
     if(this.props.index == this.props.numActions-1) {selectStyle = {display: 'none'};} else {selectStyle={};}
     if(this.props.numActions == 1) {removePremiseStyle={display: 'none'}}else {removePremiseStyle={};}
@@ -648,19 +965,53 @@ var PremiseComponent = React.createClass({
     }
     
     var act = this.state.act.trim()
-    
-    if(act.split(" ")[0] != "") {
-      var actionSubjectDefault = act.split(" ")[0];
-    } else {
-      var actionSubjectDefault = "subject"
+
+    var premiseSubjectDefault = "subject";
+    if(this.state.premiseSubject==''){
+      var premiseSubjectValue = "subject" ;
+    } else{
+      if(this.state.customSubject){
+        var premiseSubjectValue = 'customOption';
+      } else{
+        var premiseSubjectValue = this.state.premiseSubject;
+      }
     }
-    var actionPredicateDefault = act.split(" ").slice(1, -1).join(" ");
-    if(act.trim().split(" ").slice(-1)[0] != "") {
-      var actionObjectDefault = act.split(" ").slice(-1)[0];
+    
+    var premiseObjectDefault = "object";
+    if(this.state.premiseObject==''){
+      var premiseObjectValue = "object" ;
+    } else{
+      if(this.state.customSubject){
+        var premiseObjectValue = 'customOption';
+      } else{
+        var premiseObjectValue = this.state.premiseObject;
+      }
+    }
+    var actionPredicateDefault=""
+
+    var customOptionSubjectText = '' ;
+    var customOptionSubjectTextInput='';
+    var customOptionObjectText = '';
+    var customOptionObjectTextInput='';
+
+    if(this.state.customSubjectText.length>0){
+      customOptionSubjectText=this.state.customSubjectText;
+      customOptionSubjectTextInput=this.state.customSubjectText;
     } else {
-      var actionObjectDefault = "object"
+        customOptionSubjectText = '[custom]';
     }
 
+    if(this.state.customObjectText.length>0){
+      customOptionObjectText=this.state.customObjectText;
+      customOptionObjectTextInput=this.state.customObjectText;
+    } else {
+      customOptionObjectText = '[custom]'
+    }
+
+    console.log(premiseSubjectValue)
+    console.log(this.state.premiseSubject)
+    console.log(premiseObjectValue)
+    console.log(this.state.premiseObject)
 
     if(this.props.edit == true) {
       if (this.state.customValue == true || this.props.predicateIndex == 0) { // no options to chose from
@@ -671,20 +1022,30 @@ var PremiseComponent = React.createClass({
                 <button onClick={this.removePremise} style={removePremiseStyle} className='btn btn-xs save-predicate-btn'>Remove Premise</button>
               </div>
               
-              <span style = {wrapStyle}>
-                <textarea ref='actionSubject' rows="1" maxLength="50" cols="10" placeholder="subject" defaultValue={actionSubjectDefault} onChange={this.subjectChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
-                <textarea ref='actionPredicate' rows="1" maxLength="50" cols="15" placeholder="action" defaultValue={actionPredicateDefault} onChange={this.predicateChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
-                <select className='soflow' ref='actionObject' defaultValue={actionObjectDefault} onChange={this.objectChange} style={objectStyle}>
-                  <option value="" disabled>object</option>
+              <div style = {wrapStyle}>
+                <input ref='actionSubjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionSubjectTextInput} onChange={this.subjectCustomChange} style={CustomStyle} onBlur={this.onBlurHandler}></input>
+                <select className='soflow' ref='actionSubject' value={premiseSubjectValue} onChange={this.subjectChange} style={btnStyle}>
+                  <option value="subject" disabled>{premiseSubjectDefault}</option>
                   <option value="someone">someone</option>
                   <option value="something">something</option>
                   <option value="somewhere">somewhere</option>
-                  <option value="-">-</option>
+                  <option value="customOption">{customOptionSubjectText}</option>
+                </select>
+              </div>
+              <div style = {wrapStyle}>
+                <textarea ref='actionPredicate' rows="1" maxLength="50" cols="15" placeholder="action" defaultValue={actionPredicateDefault} onChange={this.predicateChange} style={divStyle}></textarea>
+              </div>
+              <div style = {wrapStyle}>
+                <select className='soflow' ref='actionObject' value={premiseObjectValue} onChange={this.objectChange} style={objectStyle}>
+                  <option value="object" disabled>{premiseObjectDefault}</option>
+                  <option value="someone">someone</option>
+                  <option value="something">something</option>
+                  <option value="somewhere">somewhere</option>
+                  <option value="--">-</option>
                   <option value="customOption">[custom object]</option>
                 </select>
-                
+              </div>
+
                 <PrepphraseComponent
                   ref='ppcomp'
                   editing={true}
@@ -695,29 +1056,42 @@ var PremiseComponent = React.createClass({
                   <option value="and">and</option>
                   <option value="or">or</option>
                 </select>
-              </span>
             </div>
           );
         } else if(this.state.customSubject == false && this.state.customObject == true) {
           return(
             <div style={wrapStyle}>
+
               <div style={linkStyle}>
                 <button onClick={this.removePremise} style={removePremiseStyle} className='btn btn-xs save-predicate-btn'>Remove Premise</button>
               </div>
               
-              <span style = {wrapStyle}>
-                <select className='soflow' ref='actionSubject' defaultValue={actionSubjectDefault} onChange={this.subjectChange} style={btnStyle}>
-                  <option value="" disabled>subject</option>
+              <div style = {wrapStyle}>
+                <select className='soflow' ref='actionSubject' value={premiseSubjectValue} onChange={this.subjectChange} style={btnStyle}>
+                  <option value="subject" disabled>{premiseSubjectDefault}</option>
                   <option value="someone">someone</option>
                   <option value="something">something</option>
                   <option value="somewhere">somewhere</option>
                   <option value="customOption">[custom subject]</option>
                 </select>
-                
+              </div>
+
+              <div style = {wrapStyle}>
                 <textarea ref='actionPredicate' rows="1" maxLength="50" cols="15" placeholder="action" defaultValue={actionPredicateDefault} onChange={this.predicateChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
-                <textarea ref='actionObject' rows="1" maxLength="50" cols="10" placeholder="object" defaultValue={actionObjectDefault} onChange={this.objectChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
+              </div>
+
+              <div style = {wrapStyle}>
+                <input ref='actionObjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionObjectTextInput} onChange={this.objectCustomChange} style={CustomStyle}></input>
+                <select className='soflow' ref='actionObject' value={premiseObjectValue} onChange={this.objectChange} style={btnStyle}>
+                  <option value="object" disabled>{premiseObjectDefault}</option>
+                  <option value="someone">someone</option>
+                  <option value="something">something</option>
+                  <option value="somewhere">somewhere</option>
+                  <option value="--">-</option>
+                  <option value="customOption">{customOptionObjectText}</option>
+                </select>
+              </div>
+
                 <PrepphraseComponent
                   ref='ppcomp'
                   editing={true}
@@ -728,22 +1102,43 @@ var PremiseComponent = React.createClass({
                   <option value="and">and</option>
                   <option value="or">or</option>
                 </select>
-              </span>
             </div>
           );
         } else if(this.state.customSubject == true && this.state.customObject == true) {
           return(
             <div style={wrapStyle}>
+
               <div style={linkStyle}>
                 <button onClick={this.removePremise} style={removePremiseStyle} className='btn btn-xs save-predicate-btn'>Remove Premise</button>
               </div>
-              <span style = {wrapStyle}>
-                <textarea ref='actionSubject' rows="1" maxLength="50" cols="10" placeholder="subject" defaultValue={actionSubjectDefault} onChange={this.subjectChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
-                <textarea ref='actionPredicate' rows="1" maxLength="50" cols="15" placeholder="action" defaultValue={actionPredicateDefault} onChange={this.predicateChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
-                <textarea ref='actionObject' rows="1" maxLength="50" cols="10" placeholder="object" defaultValue={actionObjectDefault} onChange={this.objectChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
+
+              <div style = {wrapStyle}>
+                <input ref='actionSubjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionSubjectTextInput} onChange={this.subjectCustomChange} style={CustomStyle} onBlur={this.onBlurHandler}></input>
+                <select className='soflow' ref='actionSubject' value={premiseSubjectValue} onChange={this.subjectChange} style={btnStyle}>
+                    <option value="subject"  disabled>{premiseSubjectDefault}</option>
+                    <option value="someone">someone</option>
+                    <option value="something">something</option>
+                    <option value="somewhere">somewhere</option>
+                    <option value="customOption">{customOptionSubjectText}</option>
+                  </select>
+              </div>
+
+              <div style = {wrapStyle}>
+                 <textarea ref='actionPredicate' rows="1" maxLength="50" cols="15" placeholder="action" defaultValue={actionPredicateDefault} onChange={this.predicateChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
+              </div>
+
+              <div style = {wrapStyle}>
+                <input ref='actionObjectCustom' rows="1" maxLength="50" cols="10" placeholder={customOptionObjectTextInput} onChange={this.objectCustomChange} style={CustomStyle}></input>
+                <select className='soflow' ref='actionObject' value={premiseObjectValue} onChange={this.objectChange} style={btnStyle}>
+                   <option value="object" disabled>{premiseObjectDefault}</option>
+                   <option value="someone">someone</option>
+                   <option value="something">something</option>
+                   <option value="somewhere">somewhere</option>
+                   <option value="--">-</option>
+                   <option value="customOption">{customOptionObjectText}</option>
+                  </select>
+              </div>
+
                 <PrepphraseComponent
                   ref='ppcomp'
                   editing={true}
@@ -754,7 +1149,6 @@ var PremiseComponent = React.createClass({
                   <option value="and">and</option>
                   <option value="or">or</option>
                 </select>
-              </span>
             </div>
           );
         } else {
@@ -764,37 +1158,41 @@ var PremiseComponent = React.createClass({
                 <button onClick={this.removePremise} style={removePremiseStyle} className='btn btn-xs save-predicate-btn'>Remove Premise</button>
               </div>
               
-              <span style = {wrapStyle}>
-                <select className='soflow' ref='actionSubject' defaultValue={actionSubjectDefault} onChange={this.subjectChange} style={btnStyle}>
-                  <option value={actionSubjectDefault} disabled>{actionSubjectDefault}</option>
+              <div style = {wrapStyle}>
+                <select className='soflow' ref='actionSubject' value={premiseSubjectValue} onChange={this.subjectChange} style={btnStyle}>
+                  <option value="subject" disabled>{premiseSubjectDefault}</option>
                   <option value="someone">someone</option>
                   <option value="something">something</option>
                   <option value="somewhere">somewhere</option>
                   <option value="customOption">[custom subject]</option>
                 </select>
-                
+              </div>
+
+              <div style = {wrapStyle}>
                 <textarea ref='actionPredicate' rows="1" maxLength="50" cols="15" placeholder="action" defaultValue={actionPredicateDefault} onChange={this.predicateChange} style={divStyle} onBlur={this.onBlurHandler}></textarea>
-                
-                <select className='soflow' ref='actionObject' defaultValue={actionObjectDefault} onChange={this.objectChange} style={objectStyle}>
-                  <option value={actionObjectDefault} disabled>{actionObjectDefault}</option>
+              </div>
+
+              <div style = {wrapStyle}>
+                <select className='soflow' ref='actionObject' value={premiseObjectValue} onChange={this.objectChange} style={objectStyle}>
+                  <option value="object" disabled>{premiseObjectDefault}</option>
                   <option value="someone">someone</option>
                   <option value="something">something</option>
                   <option value="somewhere">somewhere</option>
-                  <option value="-">-</option>
+                  <option value="--">-</option>
                   <option value="customOption">[custom object]</option>
                 </select>
-                
-                <PrepphraseComponent
-                  ref='ppcomp'
-                  editing={true}
-                  defaultPrep={this.state.prep}
-                />
-                
-                <select className='soflow' ref='op' style={selectStyle} defaultValue={this.props.opdefaultValue} onChange={this.opChangeHandler}>
-                  <option value="and">and</option>
-                  <option value="or">or</option>
-                </select>
-              </span>
+              </div>
+
+              <PrepphraseComponent
+                ref='ppcomp'
+                editing={true}
+                defaultPrep={this.state.prep}
+              />
+              
+              <select className='soflow' ref='op' style={selectStyle} defaultValue={this.props.opdefaultValue} onChange={this.opChangeHandler}>
+                <option value="and">and</option>
+                <option value="or">or</option>
+              </select>
             </div>
           );
         }
@@ -825,6 +1223,8 @@ var PremiseComponent = React.createClass({
       }
     } else {
       if(this.state.linking == true  && this.props.step == 2){
+        console.log("step 2")
+
         return(
           <div style = {wrapStyle}>
             <div style={linkStyle}>
@@ -853,6 +1253,9 @@ var PremiseComponent = React.createClass({
           </div>
           );
       } else { // not editing and step 3
+        console.log("step 3")
+        console.log(premiseSubjectValue)
+        console.log(this.state.premiseSubject)
           return(
             <div style = {wrapStyle}>
               <div style={linkStyle}>
@@ -885,10 +1288,15 @@ var RuleComponent = React.createClass({
     return { editing: true,
              actions: [],
              ops:[],
-             linking: false }
+             linking: false,
+             ruleArray: [],
+             cons: '' }
   },
 
   edit: function() {
+    console.log(this.props.act);
+    console.log(this.props.op);
+    console.log(this.props.cons);
     this.props.toggleEdit();
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={-1}/>, document.getElementById('footer-instructions'));
     this.setState({editing: true});
@@ -896,7 +1304,6 @@ var RuleComponent = React.createClass({
 
   remove: function() {
     if (this.props.numPreds > 0) {
-      console.log('removing predicate');
       this.props.removePredicate(this.props.index);
     } else {
       alert("Must provide at least one implication.");
@@ -905,16 +1312,24 @@ var RuleComponent = React.createClass({
   },
 
   save: function() {
-    console.log("saving predicate");
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={9} />, document.getElementById('footer-instructions'));
     var actions = [];
     var ops = [];
+    var actionsTests = [];
+
     for(var ref in this.refs) {
       if(ref.includes('action')) {
         actions.push(this.refs[ref].getAction());
         ops.push(this.refs[ref].getOp());
+        actionsTests.push(this.refs[ref].actionCheck());
       }
     }
+
+
+    function isFalse(element, index, array) {
+        return element==false;
+    }
+
     
     var consequence = this.refs.consequence.getData();
     var consequencePredicate = consequence['cPredicate']
@@ -923,28 +1338,65 @@ var RuleComponent = React.createClass({
     var consequencePrepType = consequence['cPrepType']
     var consequencePrepObject = consequence['cPrepObject']
 
-
-
     if(this.props.index > 0 && consequencePredicate=="" && consequenceSubject=="" && consequenceObject=="" && actions.join().trim() == "") { // discard empty inference rules
       this.props.toggleEdit();
       this.setState({editing: false});
       this.remove();
       return false;
     }
-    for (var i=0;i<actions.length;i++) {
-      var aContent = actions[i].split(" ");
-      if(aContent.length < 3 || consequenceSubject == "" || consequenceObject == "" || consequencePredicate == "") { // partially complete form
-        alert("Can't leave empty fields in premise");
+
+    for (var i=0;i<actionsTests.length;i++) {
+      var alertString="Can't leave empty fields in premise.";
+      if(actionsTests[i][0]==false || actionsTests[i][1]==false || actionsTests[i][2]==false || consequenceSubject == "" || consequencePredicate == "" || consequenceObject == "") { // partially complete form
+        
+
+      if(actionsTests[i][0]==false || actionsTests[i][1]==false || actionsTests[i][2]==false ) { 
+        alertString+= " To the premise add: ";
+        if(actionsTests[i][0]==false){
+          alertString += "a subject ";
+        } if(actionsTests[i][1]==false) {
+          alertString += "an action ";
+        } if(actionsTests[i][2]==false) {
+          alertString += "an object or choose the -- for no option ";
+        }
+        alertString += ".";
+
+      }
+      if(consequenceSubject == "" || consequencePredicate == "" || consequenceObject == "") { 
+        alertString+= " To the consequence add: ";
+        if(consequenceSubject == ""){
+          alertString += "a subject ";
+        } if(consequencePredicate == "") {
+          alertString += "an action ";
+        } if(consequenceObject == "") {
+          alertString += "an object or choose the -- for no option ";
+        }
+        alertString += ".";
+
+      }
+
+        alert(alertString);
         return false;
       }
     }
+
     this.props.toggleEdit();
     this.props.updatePredicate(actions, ops, consequenceSubject + " " + consequencePredicate + " " + consequenceObject + " " + consequencePrepType + " " + consequencePrepObject, this.props.index);
+  
+    var rule = [[],[],[]];
+    var cons ='';
+    rule[0].push(actions);
+    rule[1].push(ops);
+    rule[2].push(consequenceSubject + " " + consequencePredicate + " " + consequenceObject + " " + consequencePrepType + " " + consequencePrepObject);
+    cons = consequenceSubject + " " + consequencePredicate + " " + consequenceObject + " " + consequencePrepType + " " + consequencePrepObject;
+    this.setState({cons: cons});
+    console.log(this.props.act);
+    console.log(this.props.op);
+    console.log(this.props.cons);
     this.setState({editing: false});
   },
   
   resetRule: function() {
-    console.log('reset rule');
     for(var ref in this.refs) {
       if(ref.includes('action')) {
         this.refs[ref].resetPremise(this.props.index);
@@ -960,7 +1412,6 @@ var RuleComponent = React.createClass({
   },
 
   addPremise: function() {
-    console.log("adding premise");
     var actions = this.state.actions;
     actions.push("");
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={2} />, document.getElementById('footer-instructions'));
@@ -969,7 +1420,6 @@ var RuleComponent = React.createClass({
   },
   
   removePremise: function(i) { // ith premise
-    console.log("removing premise");
     this.props.removePremise(this.props.index,i);
   },
 
@@ -978,10 +1428,13 @@ var RuleComponent = React.createClass({
   },
   
   add: function() {
-    console.log('adding predicate');
     if(this.props.cons == null || this.props.cons == ''){alert("Please complete elements of this rule."); return(false);}
     this.props.addPredicate();
     this.setState({editing: false});
+  },
+
+  displayNL: function() {
+    this.props.displayNL();
   },
   
   setLink: function() {
@@ -992,7 +1445,6 @@ var RuleComponent = React.createClass({
   },
 
   renderNormal: function() {
-    console.log('Rule render normal ');
 
     var btnVisibility = "";
     if(this.props.index==this.props.numPreds-1) {
@@ -1003,11 +1455,13 @@ var RuleComponent = React.createClass({
     var divStyle = { display: 'inline-block', margin: 5 };
     var editBtnStyle = { display: 'inline-block', margin: 5, backgroundColor:'#008CBA' };
     var removeBtnStyle = { display: 'inline-block', margin: 5, backgroundColor:'red' };
+
     var btnStyle = { display: btnVisibility, margin: 5};
     var font = { fontSize: 50};
 
 
     if(this.props.step==2) {
+      console.log("rule 2")
       return (
         <div className='predicate'>
         <div><b>{'Logical rule ' + (this.props.index+1) + ':'}</b></div>
@@ -1052,6 +1506,8 @@ var RuleComponent = React.createClass({
       );
     } else {
       if(this.props.edit == true) {
+        console.log("rule 3 1 ")
+
         return (
           <div className='predicate'>
           <div><b>{'Logical rule ' + (this.props.index+1) + ':'}</b></div>
@@ -1089,6 +1545,9 @@ var RuleComponent = React.createClass({
           </div>
           );
       } else {
+
+         console.log("rule 3 2 ")
+
         return (
           <div className='predicate'>
           <div><b>{'Logical rule ' + (this.props.index+1) + ':'}</b></div>
@@ -1133,10 +1592,6 @@ var RuleComponent = React.createClass({
   },
 
   renderForm: function() {
-    //console.log(this.props.cons.substring(1, this.props.cons.indexOf('~')));
-    console.log('Rule render form ');
-    console.log(this.props.index);
-    console.log(this.props.numPreds-1);
 
     var divStyle = { display: 'inline-block', margin: 5, marginBottom: -5 };
     var inlineBlock = { marginLeft:10 };
@@ -1157,8 +1612,6 @@ var RuleComponent = React.createClass({
     } else {var consequencePredicateDefault = "";
             var consequenceObjectDefault = ""; 
     }
-
-
 
     return (
       <div className='predicate'>
@@ -1182,7 +1635,9 @@ var RuleComponent = React.createClass({
                 contextLinks={this.props.contextLinks[i]}
                 selectedText={this.props.selectedText}
                 step={this.props.step}
-                removePremise={this.removePremise}>
+                removePremise={this.removePremise}
+                actions={this.props.act}
+                op={this.props.op}>
               </PremiseComponent>
               );
           }, this)
@@ -1199,7 +1654,8 @@ var RuleComponent = React.createClass({
           consequenceSubjectDefault = {consequenceSubjectDefault}
           consequencePredicateDefault = {consequencePredicateDefault}
           consequenceObjectDefault = {consequenceObjectDefault}
-          contextLinks={this.props.contextLinks[20]}>
+          contextLinks={this.props.contextLinks[20]}
+          cons={this.props.cons}>
         </ConsequenceComponent>
         <button onClick={this.save} className='btn btn-xs save-predicate-btn' style={saveBtnStyle}>Save</button>
         <button onClick={this.resetRule} className='btn btn-xs save-predicate-btn' style={saveBtnStyle}>Reset</button>
@@ -1210,10 +1666,6 @@ var RuleComponent = React.createClass({
   },
 
   render: function() {
-    console.log("refs:");
-    console.log(this.refs);
-    console.log("state");
-    console.log(this.state);
     if(this.state.editing) {
       return this.renderForm();
     } else {
@@ -1230,7 +1682,6 @@ var PredicateManager = React.createClass({
                         ]
                       ];
     predicates[0][3][20] = [""];
-    console.log(predicates);
     return {
       predicates: predicates,
       consList: [],           // consequence list
@@ -1238,12 +1689,13 @@ var PredicateManager = React.createClass({
       linkToggle: false,      // toggle depending on link state
       step: 0,                // hit step
       edit: true,             // are we editing a rule?
-      stepBtn: true
+      stepBtn: true,
+      nls: [],
+      nlText:''
     }
   },
 
   removePredicate: function (i) {
-    console.log('removing rule ' + i);
     var predicates = this.state.predicates;
     predicates.splice(i, 1);
     var consequences = this.state.consList;
@@ -1253,7 +1705,6 @@ var PredicateManager = React.createClass({
   },
 
   updatePredicate: function(actions,ops,consequence,i) { // predicate is a tuple of array of variables and an implication jth action, ith consequence
-    console.log('updating comment ' + i);
     var predicates = this.state.predicates;
     var consequences = this.state.consList;
     predicates[i][0] = actions;
@@ -1263,27 +1714,20 @@ var PredicateManager = React.createClass({
     this.setState({predicates: predicates});
     this.setState({consList: consequences});
     //globalState[this.props.index] = this.state.predicates;
+    console.log("update predicates: ")
+    console.log(predicates)
   },
 
   addPredicate: function() {
-    console.log('addPredicate ');
     var predicates = this.state.predicates;
     predicates.push([[""],[""],"",[[],[]]]);
     predicates[predicates.length-1][3][20] = [""];
     this.toggleEdit();
     this.setState({predicates: predicates});
-    console.log(predicates);
   },
 
-
-  resetPredicate: function(i) {
-    this.removePredicate(i)
-    this.addPredicate();
-
-  },
 
   addPremise: function(i) {
-    console.log('adding premise');
     var predicates = this.state.predicates;
     predicates[i][0].push("");
     predicates[i][1].push("");
@@ -1291,11 +1735,9 @@ var PredicateManager = React.createClass({
     predicates[i][3][predicates[i][3].length-20] = [""]; // TODO: fix
     ReactDOM.render(<FooterInstructionComponent step={1} substep={1} r={1} />, document.getElementById('footer-instructions'));
     this.setState({predicates:predicates});
-    console.log(predicates);
   },
   
   removePremise: function(i, j) { // ith rule, jth premise
-    console.log('removing premise: ' + i);
     var predicates = this.state.predicates;
 
     if (predicates[i][0].length == 1) {
@@ -1311,24 +1753,72 @@ var PredicateManager = React.createClass({
   },
 
   addLink: function(i,j,k, grounding ,c) { // ground kth word of the jth action of the ith rule and color
-    console.log('grounding element');
     var predicates = this.state.predicates;
     predicates[i][3][j][k] = [grounding,c]; // error here
+    var nls = this.state.nls;
+    var nlText = this.state.nlText;
+    for(var i = 0; i < predicates.length; i++) {
+      var predicate = predicates[i];
+      var str1 ="";
+
+      for(var j = 0; j < predicate[0].length; j++) {
+          var str2 = predicate[0][j].replace('--', '').replace(/~/gi, '').trim()+" ";
+          if(j!=predicate[0].length-1){
+            str2+=predicate[1][j]+" ";
+          }
+        str2=str2.split(" ");
+        for (var p in predicate[3][j]){
+          var index = predicate[3][j].indexOf(predicate[3][j][p]);
+          str2[index]=predicate[3][j][p][0];
+        }
+        str2=str2.join(" ");
+        str1+=str2;
+
+       }
+      str1=str1.substring(0,str1.lastIndexOf(" "))+" implies ";
+      var cons=predicate[2].replace('--', '').replace(/~/gi, '').split(" ");
+
+      for(var c in predicate[3][20]){
+        var index = predicate[3][20].indexOf(predicate[3][20][c]);
+
+        if(typeof(predicate[3][20][c][0])!='undefined'){
+          cons[index]=predicate[3][20][c][0];
+        } else {
+          cons[index]=cons[index];
+
+        }
+      }
+      cons=cons.join(" ");
+
+      str1+=cons;
+      str1=str1.replace('- ', '').replace('-','');
+      str1=str1[0].toUpperCase() + str1.slice(1).trim()+".";
+      nls.push(str1);
+      nlText=str1
+    }
+
     this.setState({predicates: predicates});
+    this.setState({nls:nls});
+    this.setState({nlText:nlText});
+
     ReactDOM.render(<ContextBoard predicates={predicates}></ContextBoard>, document.getElementById('grounding-container'));
-    console.log(predicates);
+
+  },
+
+  displayNL: function(){
+      var nlText = this.state.nlText;
+      ReactDOM.render(<NL nlText={nlText}></NL>, document.getElementById('nl-container'));
+
 
   },
   
   toggleLink: function() {
-    console.log('toggleLink ');
 
     var l = this.state.linkToggle;
     this.setState({linkToggle: !l});
   },
   
   toggleEdit: function() {
-    console.log('toggleEdit ');
 
     var ed = this.state.edit;
     ed = !ed;
@@ -1336,7 +1826,6 @@ var PredicateManager = React.createClass({
   },
 
   nextStep: function() {
-    console.log('next step');
     $('#submit-btn').prop('disabled', false);
     var s = this.state.step;
     if(s == 0) {
@@ -1359,6 +1848,9 @@ var PredicateManager = React.createClass({
       if(s > 1) {
         document.getElementById('context-title').style.display="inline-block";
         document.getElementById('grounding-container').style.display="inline-block";
+        document.getElementById('nl-title').style.display="inline-block";
+        document.getElementById('nl-container').style.display="inline-block";
+
       }
     }
     this.setState({step: s});
@@ -1366,7 +1858,6 @@ var PredicateManager = React.createClass({
   },
 
   prevStep: function() {
-    console.log('prev step');
     var s = this.state.step;
     if (s > 0) {
       s = s-1;
@@ -1374,6 +1865,9 @@ var PredicateManager = React.createClass({
     if (s < 2) {
       document.getElementById('context-title').style.display="none";
       document.getElementById('grounding-container').style.display="none";
+      document.getElementById('nl-title').style.display="none";
+      document.getElementById('nl-container').style.display="none";
+
       //this.setState({stepBtn:!this.state.stepBtn});
     }
     this.setState({step: s});
@@ -1401,11 +1895,11 @@ var PredicateManager = React.createClass({
   },
   
   render: function() {
-  console.log('Predicate Render ');
-
     var nextBtnStyle = { display: 'inline-block', marginRight: 10 };
     var prevBtnStyle = { display: 'inline-block', marginRight: 10 };
     var newRuleBtnStyle = {display: 'inline-block',marginLeft: 5, backgroundColor: '#4CAF50'};
+    var nlBtnStyle = { display: 'inline-block', margin: 5, backgroundColor:'#5cb85c' };
+
     var predicateStyle = {};
     if(this.state.step==0) {
       ReactDOM.render(<FooterInstructionComponent step={0} substep={1} r={1} />, document.getElementById('footer-instructions'));
@@ -1489,7 +1983,7 @@ var PredicateManager = React.createClass({
                     toggleEdit={this.toggleEdit}
                     edit={this.state.edit}
                     removePremise={this.removePremise}
-                    resetPredicate={this.removePremise}>
+                    displayNL={this.displayNL}>
                   </RuleComponent>
                   );
               }, this)
@@ -1497,9 +1991,14 @@ var PredicateManager = React.createClass({
             </div>
             <div className="row">
               <div className='col-md-8 col-md-offset-2 text-center'>
-                <b id='context-title' style={{display: "none"}}><h4>Story Grounding</h4></b>
+                <b id='context-title' style={{display: "none"}}><h4>Story Grounding Rules</h4></b>
                 <br></br>
                 <div id='grounding-container'></div>
+              </div>
+              <div className='col-md-8 col-md-offset-2 text-center'>
+                <b id='nl-title' style={{display: "none"}}><h4>Natural Language Output</h4></b>
+                <br></br>
+                <div id='nl-container'>{this.state.nlText}</div>
               </div>
               <hr></hr>
             </div>
@@ -1536,11 +2035,11 @@ var ContextBoard = React.createClass({
                   if(mapping != "") {
                     if(j==20){ // if consequence
                       return(
-                        <div style={colorStyle}>  {"In predicate "+(i+1) + ", the consequence on the right-hand-side" + ", you mapped: word " + (k+1) +"("+predicate[2].split(" ")[k]+") -> "+mapping[0]} </div>
+                        <div style={colorStyle}>  {"In rule "+(i+1) + ", the consequence on the right-hand-side" + ", you mapped: word " + (k+1) +"("+predicate[2].split(" ")[k]+") -> "+mapping[0]} </div>
                         );
                     } else {
                       return(
-                        <div style={colorStyle}>  {"In predicate "+(i+1) + ", the premise " +(j+1) + " on the left-hand-side, you mapped: word: " + (k+1) +"("+predicate[0][j].split(" ")[k]+"): -> "+mapping[0]} </div>
+                        <div style={colorStyle}>  {"In rule "+(i+1) + ", the premise " +(j+1) + " on the left-hand-side, you mapped: word: " + (k+1) +"("+predicate[0][j].split(" ")[k]+"): -> "+mapping[0]} </div>
                       );
                     }
                   }
@@ -1550,9 +2049,24 @@ var ContextBoard = React.createClass({
           );
         }, this)
       }
-      </div>
+      </div>     
     );
   }
 });
+
+
+var NL = React.createClass({
+  render: function() {
+    var contextStyle = {textAlign: 'center'};
+    var nlsStyle = {textAlign: 'center', color: '#0099CC'};
+
+    return(
+      <div className="nls" style={contextStyle}>
+            <div style={nlsStyle}>{this.props.nlText}</div>
+      </div>      
+    );
+  }
+});
+
 
 window.PredicateManager = PredicateManager;

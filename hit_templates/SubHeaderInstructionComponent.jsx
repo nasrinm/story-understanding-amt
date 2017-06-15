@@ -30,7 +30,7 @@ var SubHeaderInstructionComponent = React.createClass({
       //instructions = ["Start grounding your premise elements by clicking the \'Ground to Story\' button.", "Simply select a word from the premise that you want to ground by simply clicking on it.  Then scroll up to the `story' and highlight the word/phrase with your mouse. This word/phrase will be copied as your grounding.", "Then Click the \'Submit\' button to save this mapping.","Continue the above until you have grounded all the characters, items, and concepts from the rules to the story."];
       instructions.push("You can use a phrase in the story for grounding multiple times.");
       instructions.push("Continue the above until you have grounded all the characters, items, and concepts from the rules to the story.");
-      instructions.push("Use the Show Natural Language button to see how the natural langauge of your rule reads to edit it.");
+      instructions.push("Notice the Natural Language below to see how the natural langauge of your rule reads to edit it.");
       instructions.push("See the 'recommended steps' tab for more specific instructions.");
     }
     return (

@@ -4,3 +4,8 @@ simpleamt.pyc
 tmp/example_input.txt
 tmp/hit_ids.txt
 tmp/results.txt
+hit_templates/update_ht.sh
+RuleManager copy.jsx
+RuleManager.jsx
+show_hits.py
+
