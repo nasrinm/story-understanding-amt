@@ -6,14 +6,14 @@
     <script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
     <!--<script src="browser.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
-    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-    <script src='//cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js'></script>
     <!-- get text selection -->
-    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery.selection/1.0.1/jquery.selection.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.selection/1.0.1/jquery.selection.min.js'></script>
     <!-- end of required libraries -->
-    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
-    <script src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js'></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- generating color function -->
      <script src='https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/rcolor.js'></script>
@@ -114,7 +114,6 @@
          white-space: nowrap;
          width: 105px;
       }
-      
     </style>
   </head>
   <body>
@@ -123,6 +122,13 @@
         <div class='col-md-10 col-md-offset-1' id='instruction-div'></div>
         <div class='col-md-10 col-md-offset-1' id='examples-div'></div>
       </div>
+      <div class='row' style="margin-left:0px;">
+        <br>
+          <a href="https://youtu.be/UbTqb15tw58" class="btn-lg btn-primary active" role="button" target="_blank" aria-pressed="true">Click Here for Video Instruction</a>
+        <br>
+      </div>
+      <div class='row' style="margin-top:15px"></div>
+
       
       <div class='row' style="margin-top:15px">
         <div class='col-md-10 col-md-offset-1 text-center' style="margin-top:-12px;">
@@ -147,72 +153,68 @@
         <br>
         <div id='grounding-container'></div>
       </div>-->
+    <div class='row' style="margin-top:0px">
+      <div id='submit-container' class='col-md-8 col-md-offset-4 pull-right'> 
+      <script type='text/json' id='input'>
+  
+</script>
+<form id='results-form' method='post' action='dummy'>
+  <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+  <input type='hidden' value='' name='output' id='output'/>
+  <input type='submit' class='btn btn-md btn-success pull-right' id='submit-btn' value='Submit Results' disabled/>
+</form>
+<script>
+  var amt = (function() { // type='submit'
+      function getUrlParam(name) {
+      var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+      return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+    }
 
+    function getInput(default_input) {
+      if (typeof(default_input) === 'undefined') default_input = null;
+      try {
+        return JSON.parse($('#input').html());
+      } catch (e) {
+        return default_input;
+      }
+    }
 
+    function setOutput(output) {
+      $('#output').val(JSON.stringify(output));
+    }
 
+    function isPreview() {
+      var assignment_id = getUrlParam('assignmentId');
+      if (assignment_id === null) return false;
+      return assignment_id == 'ASSIGNMENT_ID_NOT_AVAILABLE';
+    }
 
-      <div class='row' style="margin-top:0px">
-        <div id='submit-container' class='col-md-4 text-right'>
-          <script type='text/json' id='input'>
-          
-        </script>
-        <form id='results-form' method='post' action='dummy'>
-          <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
-          <input type='hidden' value='' name='output' id='output'/>
-          <input type='submit' class='btn btn-md btn-success' id='submit-btn' value='Submit Results' disabled/>
-        </form>
-        <script>
-          var amt = (function() { // type='submit'
-              function getUrlParam(name) {
-              var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-              return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
-            }
+    function setupSubmit() {
+      var submit_to = getUrlParam('turkSubmitTo');
+      $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');
+      $('#assignmentId').val(getUrlParam('assignmentId'));
+    }
 
-            function getInput(default_input) {
-              if (typeof(default_input) === 'undefined') default_input = null;
-              try {
-                return JSON.parse($('#input').html());
-              } catch (e) {
-                return default_input;
-              }
-            }
-
-            function setOutput(output) {
-              $('#output').val(JSON.stringify(output));
-            }
-
-            function isPreview() {
-              var assignment_id = getUrlParam('assignmentId');
-              if (assignment_id === null) return false;
-              return assignment_id == 'ASSIGNMENT_ID_NOT_AVAILABLE';
-            }
-
-            function setupSubmit() {
-              var submit_to = getUrlParam('turkSubmitTo');
-              $('#results-form').attr('action', submit_to + '/mturk/externalSubmit');
-              $('#assignmentId').val(getUrlParam('assignmentId'));
-            }
-
-            return {
-              getInput: getInput,
-              setOutput: setOutput,
-              isPreview: isPreview,
-              setupSubmit: setupSubmit,
-            }
-          })();
-        </script>
-        </div>
-
+    return {
+      getInput: getInput,
+      setOutput: setOutput,
+      isPreview: isPreview,
+      setupSubmit: setupSubmit,
+    }
+  })();
+</script>
       </div>
+    </div>
+            <br>
       <div class='row' style="margin-top:100px">
-        <br>
-        <br>
-        <div id='comment-container' class='col-md-8 col-md-offset-2 text-center'>
-       Do you have any comments about the task? We appreciate your input. You can also contact us via <a href="mailto:rocnlp@gmail.com?Subject=storyUnderstanding" target="_top">email</a> with any questions.
-      <textarea id='comment-area' class='form-control tb-margin'></textarea>
+
+      <div id='comment-container' class='col-md-8 col-md-offset-2 text-center'>
+       Do you have any comments about the task? You can contact us via <a href="mailto:rocnlp@gmail.com?Subject=storyUnderstanding" target="_top">email</a> with any questions. We appreciate your input.
       </div>
       </div>
-      <span class='col-md-8 text-center' style="padding-left:70px">You must accept this HIT before you can submit it.</span>
+      <div class='row' style="margin-top:0px">
+        <span class='col-md-8 text-center' style="padding-left:70px"><i>**You must accept this HIT before you can submit it.</i></span>
+      </div>
       <div id="footer-instructions" style="overflow: auto; text-align:left"><b>Recommended Steps</b></div>
     </div>
   </body>
