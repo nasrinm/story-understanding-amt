@@ -193,9 +193,9 @@ var Video = React.createClass({
       <div style={instructionStyle}>
           <h4 style = {headerStyle}><span style={{'fontWeight': 'bold'}}>Video Instructions</span></h4>
           <button onClick={this.minMaximize} className='btn btn-xs' style={btnStyle}>HIDE</button>
-          <div >
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/UbTqb15tw58" frameborder="0" allowfullscreen></iframe>
-          </div>
+        <div >
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/PeBs8RWfLSE" frameborder="0" allowfullscreen></iframe>  
+        </div>
       </div>
 
       );
