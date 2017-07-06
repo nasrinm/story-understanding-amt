@@ -104,6 +104,7 @@ var ExampleComponent = React.createClass({
     var btnStyle = {marginLeft: 5};
     var paragraphStyle = {marginRight: 30, marginLeft: -5};
     var divStyle = {paddingTop: 15};
+    var dStyle = {marginLeft:0};
     
    if(this.state.minimized == true) {
       return(
@@ -139,11 +140,69 @@ var ExampleComponent = React.createClass({
                     </ul>
               </li>
             </ul>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+             <div><a href="https://s3.amazonaws.com/aws-website-story-understanding-amt-monj2/js/storycloze_storiesexamples.html" class="btn-lg btn-primary active" role="button" target="_blank" aria-pressed="true">CLICK HERE FOR MORE EXAMPLES</a>
+             </div>
+            </div>
       </div>
+
       );
     }
   }
 });
 
+var Video = React.createClass({
+  getInitialState: function() {
+    return { minimized: false }
+  },
+  
+  minMaximize: function() {
+    var m = !this.state.minimized;
+    this.setState({minimized: m});
+  },
+  
+  render: function() {
+    /*
+    Instruction color styling
+    */
+    var bStyle = {color: 'blue'},
+        rStyle = {color: 'red'},
+        pStyle = {color: 'purple'},
+        gStyle = {color: 'green'},
+        oStyle = {color: 'orange'},
+        yStyle = {color: 'yellow'},
+        mStyle = {color: 'magenta'},
+        olStyle = {color: 'olive'}
+    
+    var instructionStyle = {border: "1px solid black", marginTop: 15};
+    var ulStyle = {textAlign: 'left'};
+    var headerStyle = {display: 'inline-block', textAlign: 'center', marginLeft: 15};
+    var btnStyle = {marginLeft: 5};
+    var paragraphStyle = {marginRight: 30, marginLeft: -5};
+    var divStyle = {paddingTop: 15};
+    
+   if(this.state.minimized == true) {
+      return(
+        <div style={instructionStyle}>
+            <h4 style = {headerStyle}><span style={{'fontWeight': 'bold'}}>Video Instructions</span></h4>
+            <button onClick={this.minMaximize} className='btn btn-xs' style={btnStyle}>SHOW</button>
+        </div>
+      );
+    }  else {
+      return(
+      <div style={instructionStyle}>
+          <h4 style = {headerStyle}><span style={{'fontWeight': 'bold'}}>Video Instructions</span></h4>
+          <button onClick={this.minMaximize} className='btn btn-xs' style={btnStyle}>HIDE</button>
+          <div >
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/UbTqb15tw58" frameborder="0" allowfullscreen></iframe>
+          </div>
+      </div>
+
+      );
+    }
+  }
+});
+
+window.Video = Video;
 window.ExampleComponent = ExampleComponent;
 window.InstructionComponent = InstructionComponent;

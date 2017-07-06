@@ -12,6 +12,11 @@ ReactDOM.render(<InstructionComponent />, document.getElementById('instruction-d
 var ExampleComponent = window.ExampleComponent;
 ReactDOM.render(<ExampleComponent />, document.getElementById('examples-div'));
 
+
+var Video = window.Video;
+ReactDOM.render(<Video />, document.getElementById('video-div'));
+
+
 var SubHeaderInstructionComponent = window.SubHeaderInstructionComponent;
 
 var PrepphraseComponent = React.createClass({
@@ -82,19 +87,9 @@ var PrepphraseComponent = React.createClass({
   
   getPrepPhrase: function() {
     var d = {};
-    //if(this.refs.prepositionType.value!='--'){
-      //d['pType'] = this.refs.prepositionType.value;
-      //d['pObject'] = this.refs.prepositionSubject.value;
-      d['pType'] = this.state.prepositionType;
-      d['pObject'] = this.state.prepositionSubject;
-      
-
-      return(d);
-    //} else {
-    //d['pType'] = '';
-    //d['pObject'] = '';
-    //return(d);
-    //}
+    d['pType'] = this.state.prepositionType;
+    d['pObject'] = this.state.prepositionSubject;
+    return(d);
 
   },
 
@@ -426,6 +421,33 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   },
 
 
+
+  setConsSubjObj: function(){
+
+    var consequenceSubject = this.state.consequenceSubject;
+    var consequenceObject = this.state.consequenceObject;
+    var prepObject = this.refs.cpcomp.getPrepPhrase()['pObject'];
+
+    if(!(defaultObjects.includes(consequenceSubject))){
+      defaultObjects.push(consequenceSubject)
+    }
+    if(!(defaultObjects.includes(consequenceObject))){
+      defaultObjects.push(consequenceObject)
+    }
+    if(!(defaultObjects.includes(prepObject))){
+      defaultObjects.push(prepObject)
+    }
+
+    console.log(defaultObjects)
+  },
+
+
+
+  buttonDataCheck: function(word){
+   return(defaultObjects.includes(word));
+  },
+
+
   resetCons: function(){
     this.setState(this.getInitialState());
     this.refs.consequencePredicate.value = '';
@@ -699,12 +721,12 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
             {
               this.state.linkList.map(function(word, i) {
                 word = word.replace('--', '').replace(/~/gi, '').replace('subject','');
-                if (stopWordList.includes(word) || defaultPrepositions.includes(word)) { // word is a stopword or has already been grounded
-                  return(" " + word + " ");
-                } else {
-                  return (
+                if (this.buttonDataCheck(word)) { // word is a stopword or has already been grounded
+                  return (   
                     <button key={i} onClick={() => {this.link(i)}} className='btn btn-xs link-btn' style={btnStyle}>{word}</button>
                   );
+                } else {
+                  return(" " + word + " ");
                 }
               },this)
             }
@@ -746,7 +768,6 @@ var PremiseComponent = React.createClass({
       var prepdefaultValue = this.props.adefaultValue.substring(this.props.adefaultValue.indexOf('~'), this.props.adefaultValue.length);
     }
 
-    console.log(this.props.consList)
     var customVal = false;
     if(this.props.predicateIndex == 0) {
         customVal = true;
@@ -800,11 +821,40 @@ var PremiseComponent = React.createClass({
       return(actionSubject + " " + actionPredicate + " " + actionObject + " " + prepPhrase['pType'] + " " + prepPhrase['pObject']);
     
     } else {
-      var action = this.state.premiseCustomValue.replace(/~/gi, '');
+      var action = this.state.premiseCustomValue;
       return(action);
   }
 
 
+  },
+
+
+  buttonDataCheck: function(word){
+   return(defaultObjects.includes(word));
+  },
+
+
+  setActionSubjObj: function(){
+
+    var actionSubject = this.state.premiseSubject;
+    var actionObject = this.state.premiseObject;
+    if(this.refs.ppcomp!=undefined){
+      var prepObject = this.refs.ppcomp.getPrepPhrase()['pObject'];
+    } else {
+      console.log(this.state.premiseCustomValue)
+      var prepObject = this.state.premiseCustomValue.substring(this.state.premiseCustomValue.indexOf('~'), this.state.premiseCustomValue.length).split(" ")[1];
+    }
+
+    if(!(defaultObjects.includes(actionSubject))){
+      defaultObjects.push(actionSubject)
+    }
+    if(!(defaultObjects.includes(actionObject))){
+      defaultObjects.push(actionObject)
+    }
+    if(!(defaultObjects.includes(prepObject))){
+      defaultObjects.push(prepObject)
+    }
+    console.log(defaultObjects)
   },
 
 
@@ -1242,10 +1292,12 @@ subjectChange: function(event){
                   <option selected="selected" disabled>premise</option>
                   {
                   this.props.consList.map(function(consequence) {
-                    var cons = consequence.replace('--', '').replace(/~/gi, '').replace('subject','');
+                    var cons = consequence.replace('--', '').replace('subject','');
+                    var consClean = consequence.replace(/--/gi, '').replace(/~/gi, '').replace(/subject/gi,'')
+
                     console.log(cons)
                     return(<option key={cons}
-                      value={cons}>{cons}</option>);
+                      value={cons}>{consClean}</option>);
                   })
                 }
                 <option value="customOption">[custom premise]</option>
@@ -1273,12 +1325,12 @@ subjectChange: function(event){
             {
               this.state.linkList.map(function(word, i) {
                 word = word.replace('--', '').replace(/~/gi, '').replace('subject','');
-                if (stopWordList.includes(word) || defaultPrepositions.includes(word)) { // word is a stopword or has already been grounded
-                  return(" " + word + " ");
-                } else {
-                  return (
+                if (this.buttonDataCheck(word)) { // word is a stopword or has already been grounded
+                  return (   
                     <button key={i} onClick={() => {this.link(i)}} className='btn btn-xs link-btn' style={btnStyle}>{word}</button>
                   );
+                } else {
+                  return(" " + word + " ");
                 }
               },this)
             }
@@ -1352,7 +1404,7 @@ var RuleComponent = React.createClass({
     for(var ref in this.refs) {
       if(ref.includes('action')) {
         actions.push(this.refs[ref].getAction());
-        console.log(this.refs[ref].getAction());
+        this.refs[ref].setActionSubjObj();
         ops.push(this.refs[ref].getOp());
         actionsTests.push(this.refs[ref].actionCheck());
       }
@@ -1365,6 +1417,7 @@ var RuleComponent = React.createClass({
 
     
     var consequence = this.refs.consequence.getData();
+    this.refs.consequence.setConsSubjObj();
     var consequencePredicate = consequence['cPredicate']
     var consequenceSubject = consequence['cSubject']
     var consequenceObject = consequence['cObject']
@@ -1470,11 +1523,6 @@ var RuleComponent = React.createClass({
   },
 
   renderNormal: function() {
-    console.log(this.props.act);
-    console.log(this.props.op);
-    console.log(this.props.cons);
-    console.log(this.refs);
-
     var btnVisibility = "";
     if(this.props.index==this.props.numPreds-1) {
       btnVisibility="inline-block";
@@ -2118,9 +2166,10 @@ var NL = React.createClass({
       <div id='nls' style={contextStyle}>
       {
       this.props.nls.map(function(nl,i){ 
-        var natlang = nl.replace('--', '').replace(/~/gi, '').replace('subject','').trim()+" ";
+        var natlang = nl.replace(/--/gi, '').replace(/~/gi, '').replace(/subject/gi,'').trim()+" ";
+        var n = natlang.replace('subject','');
         return(
-          <div style={nlsStyle}>{natlang}</div>
+          <div style={nlsStyle}>{n}</div>
         );
       }, this)
     }
