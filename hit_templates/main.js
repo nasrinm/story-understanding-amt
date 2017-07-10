@@ -42,6 +42,14 @@ $(function() {
 
         // Set up the text area
         $('#text-area').val(descriptions[idx]);
+      console.log("Predicates");
+      console.log(predicates);
+      predicates = window.app.getFinalState();
+            var output = _.map(_.zip(input, descriptions, predicates), function(x) {
+                return {'story': x[0], 'description': x[1], 'predicates':x[2], 'comments':comments};
+            });
+
+            var predicates = output[0]['predicates'];
     }
 
     function enable_hit() {
@@ -64,17 +72,12 @@ $(function() {
             var output = _.map(_.zip(input, descriptions, predicates), function(x) {
                 return {'story': x[0], 'description': x[1], 'predicates':x[2], 'comments':comments};
             });
-            
-            // validate output
-            /*if (output[0]['predicates'].length < 2) {
-              alert('Please construct and link at least 2 inference rules...');
-              return(1);
-            }*/
-         
+
             var predicates = output[0]['predicates'];
-            console.log(predicates);
             var csvOutput=[{}];
             csvOutput[0]['comments'] = output[0]['comments'];
+            /*console.log(predicates);
+
             for(var i=0; i< predicates.length; i++) {
               console.log(predicates[i]);
               csvOutput.push({});
@@ -96,8 +99,8 @@ $(function() {
                   }
                 }
               }
-            }
-            console.log(csvOutput)
+            }*/
+            csvOutput.push(predicates)
             amt.setOutput(csvOutput);
         });
     }
