@@ -159,8 +159,6 @@ var PrepphraseComponent = React.createClass({
     if(this.state.editing == true) {
       if(this.state.customSubject == false) {
           if(this.state.customType == false) {
-          console.log(prepositionTypeValue)
-          console.log(prepositionSubjectValue)
             return(
               <span style={wrapStyle}>
                 <div style={wrapStyle}>
@@ -238,8 +236,6 @@ var PrepphraseComponent = React.createClass({
         }
       } else {
          if(this.state.customType == false) {
-          console.log(prepositionTypeValue)
-          console.log(prepositionSubjectValue)
           return(
           <span style={wrapStyle}>
             <div style={wrapStyle}>
@@ -276,8 +272,6 @@ var PrepphraseComponent = React.createClass({
 
           );
         } else {
-          console.log(prepositionTypeValue)
-          console.log(prepositionSubjectValue)
             return (
             <span style={wrapStyle}>
               <div style={wrapStyle}>
@@ -325,7 +319,6 @@ var PrepphraseComponent = React.createClass({
 
         var prepositionType = this.state.prepositionType.replace('--', '').replace(/~/gi, '');
         var prepositionSubject = this.state.prepositionSubject.replace('--', '').replace(/~/gi, '');
-        console.log(prepositionSubject);
         if(prepositionSubject.includes('subject')){prepositionSubject=''}
         return(
         <span style={wrapStyle}>
@@ -438,7 +431,16 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
       defaultObjects.push(prepObject)
     }
 
-    console.log(defaultObjects)
+    var index = defaultObjects.indexOf(" ");
+    if (index > -1) {
+      defaultObjects.splice(index, 1);
+    }
+
+    var index2 = defaultObjects.indexOf("");
+    if (index2 > -1) {
+      defaultObjects.splice(index2, 1);
+    }
+
   },
 
 
@@ -774,7 +776,6 @@ var PremiseComponent = React.createClass({
         var pcv = 'subject'
     } else {  
         customVal = false;
-        console.log(this.props.consList)
         if(this.props.edit == true) {
           var pcv = this.props.consList[0] 
       } else {
@@ -841,7 +842,6 @@ var PremiseComponent = React.createClass({
     if(this.refs.ppcomp!=undefined){
       var prepObject = this.refs.ppcomp.getPrepPhrase()['pObject'];
     } else {
-      console.log(this.state.premiseCustomValue)
       var prepObject = this.state.premiseCustomValue.substring(this.state.premiseCustomValue.indexOf('~'), this.state.premiseCustomValue.length).split(" ")[1];
     }
 
@@ -854,7 +854,17 @@ var PremiseComponent = React.createClass({
     if(!(defaultObjects.includes(prepObject))){
       defaultObjects.push(prepObject)
     }
-    console.log(defaultObjects)
+
+    var index = defaultObjects.indexOf(" ");
+    if (index > -1) {
+      defaultObjects.splice(index, 1);
+    }
+
+    var index2 = defaultObjects.indexOf("");
+    if (index2 > -1) {
+      defaultObjects.splice(index2, 1);
+    }
+
   },
 
 
@@ -1294,8 +1304,6 @@ subjectChange: function(event){
                   this.props.consList.map(function(consequence) {
                     var cons = consequence.replace('--', '').replace('subject','');
                     var consClean = consequence.replace(/--/gi, '').replace(/~/gi, '').replace(/subject/gi,'')
-
-                    console.log(cons)
                     return(<option key={cons}
                       value={cons}>{consClean}</option>);
                   })
@@ -1400,7 +1408,6 @@ var RuleComponent = React.createClass({
     var ops = [];
     var actionsTests = [];
 
-    console.log(this.refs);
     for(var ref in this.refs) {
       if(ref.includes('action')) {
         actions.push(this.refs[ref].getAction());

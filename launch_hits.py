@@ -27,24 +27,14 @@ if __name__ == '__main__':
   hit_ids = []
   for i, line in enumerate(args.input_json_file):
     hit_input = json.loads(line.strip())
-    print(line)
-    print('')
-    print(hit_input)
-    print('')
-    # In a previous version I removed all single quotes from the json dump.
-    # TODO: double check to see if this is still necessary.
-    template_params = { 'input': json.dumps(hit_input) }
-    print(template_params)
-    print('')
 
+    template_params = { 'input': json.dumps(hit_input) }
+  
     html = template.render(template_params)
-    print(html)
 
     html_question = HTMLQuestion(html, frame_height)
     hit_properties['question'] = html_question
 
-    # This error handling is kinda hacky.
-    # TODO: Do something better here.
     launched = False
     while not launched:
       try:
@@ -57,7 +47,6 @@ if __name__ == '__main__':
     print hit_id
     hit_ids.append(hit_id)
 
-  # TODO: Should the hit ids file be mandatory?
   if args.hit_ids_file is not None:
     with open(args.hit_ids_file, 'w') as f:
       for hit_id in hit_ids:
