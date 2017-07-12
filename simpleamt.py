@@ -41,29 +41,36 @@ def get_mturk_connection_from_args(args):
   """
   aws_access_key = args.config.get('aws_access_key')
   aws_secret_key = args.config.get('aws_secret_key')
+  aws_access_key_sandbox = args.config.get('aws_access_key_sandbox')
+  aws_secret_key_sandbox = args.config.get('aws_secret_key_sandbox')
   return get_mturk_connection(sandbox=args.sandbox,
                               aws_access_key=aws_access_key,
-                              aws_secret_key=aws_secret_key)
+                              aws_secret_key=aws_secret_key,
+                              aws_access_key_sandbox=aws_access_key_sandbox,
+                              aws_secret_key_sandbox=aws_secret_key_sandbox )
 
 
 def get_mturk_connection(sandbox=True, aws_access_key=None,
-                         aws_secret_key=None):
+                         aws_secret_key=None,aws_access_key_sandbox=None,aws_secret_key_sandbox=None):
   """
   Get a boto mturk connection. This is a thin wrapper over the
   MTurkConnection constructor; the only difference is a boolean
   flag to indicate sandbox or not.
   """
-  
   kwargs = {}
-  if aws_access_key is not None:
-    kwargs['aws_access_key_id'] = aws_access_key
-  if aws_secret_key is not None:
-    kwargs['aws_secret_access_key'] = aws_secret_key
-
   if sandbox:
+    if aws_access_key_sandbox is not None:
+      kwargs['aws_access_key_id'] = aws_access_key_sandbox
+    if aws_secret_key_sandbox is not None:
+      kwargs['aws_secret_access_key'] = aws_secret_key_sandbox
     host = 'mechanicalturk.sandbox.amazonaws.com'
   else:
+    if aws_access_key is not None:
+      kwargs['aws_access_key_id'] = aws_access_key
+    if aws_secret_key is not None:
+      kwargs['aws_secret_access_key'] = aws_secret_key
     host='mechanicalturk.amazonaws.com'
+
   return MTurkConnection(host=host, **kwargs)
 
 

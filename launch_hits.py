@@ -33,12 +33,13 @@ if __name__ == '__main__':
     html = template.render(template_params)
 
     html_question = HTMLQuestion(html, frame_height)
+
     hit_properties['question'] = html_question
 
     launched = False
     while not launched:
       try:
-        print 'Trying to launch HIT %d' % (i + 1)
+
         boto_hit = mtc.create_hit(**hit_properties)
         launched = True
       except MTurkRequestError as e:

@@ -414,42 +414,6 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
   },
 
 
-
-  setConsSubjObj: function(){
-
-    var consequenceSubject = this.state.consequenceSubject;
-    var consequenceObject = this.state.consequenceObject;
-    var prepObject = this.refs.cpcomp.getPrepPhrase()['pObject'];
-
-    if(!(defaultObjects.includes(consequenceSubject))){
-      defaultObjects.push(consequenceSubject)
-    }
-    if(!(defaultObjects.includes(consequenceObject))){
-      defaultObjects.push(consequenceObject)
-    }
-    if(!(defaultObjects.includes(prepObject))){
-      defaultObjects.push(prepObject)
-    }
-
-    var index = defaultObjects.indexOf(" ");
-    if (index > -1) {
-      defaultObjects.splice(index, 1);
-    }
-
-    var index2 = defaultObjects.indexOf("");
-    if (index2 > -1) {
-      defaultObjects.splice(index2, 1);
-    }
-
-  },
-
-
-
-  buttonDataCheck: function(word){
-   return(defaultObjects.includes(word));
-  },
-
-
   resetCons: function(){
     this.setState(this.getInitialState());
     this.refs.consequencePredicate.value = '';
@@ -723,12 +687,12 @@ var ConsequenceComponent = React.createClass({ // fix 20 index button linking
             {
               this.state.linkList.map(function(word, i) {
                 word = word.replace('--', '').replace(/~/gi, '').replace('subject','');
-                if (this.buttonDataCheck(word)) { // word is a stopword or has already been grounded
-                  return (   
+                if (stopWordList.includes(word) || defaultPrepositions.includes(word)) { // word is a stopword or has already been grounded
+                  return(" " + word + " ");
+                } else {
+                  return (
                     <button key={i} onClick={() => {this.link(i)}} className='btn btn-xs link-btn' style={btnStyle}>{word}</button>
                   );
-                } else {
-                  return(" " + word + " ");
                 }
               },this)
             }
@@ -830,42 +794,7 @@ var PremiseComponent = React.createClass({
   },
 
 
-  buttonDataCheck: function(word){
-   return(defaultObjects.includes(word));
-  },
 
-
-  setActionSubjObj: function(){
-
-    var actionSubject = this.state.premiseSubject;
-    var actionObject = this.state.premiseObject;
-    if(this.refs.ppcomp!=undefined){
-      var prepObject = this.refs.ppcomp.getPrepPhrase()['pObject'];
-    } else {
-      var prepObject = this.state.premiseCustomValue.substring(this.state.premiseCustomValue.indexOf('~'), this.state.premiseCustomValue.length).split(" ")[1];
-    }
-
-    if(!(defaultObjects.includes(actionSubject))){
-      defaultObjects.push(actionSubject)
-    }
-    if(!(defaultObjects.includes(actionObject))){
-      defaultObjects.push(actionObject)
-    }
-    if(!(defaultObjects.includes(prepObject))){
-      defaultObjects.push(prepObject)
-    }
-
-    var index = defaultObjects.indexOf(" ");
-    if (index > -1) {
-      defaultObjects.splice(index, 1);
-    }
-
-    var index2 = defaultObjects.indexOf("");
-    if (index2 > -1) {
-      defaultObjects.splice(index2, 1);
-    }
-
-  },
 
 
   actionCheck: function (){
@@ -1333,12 +1262,12 @@ subjectChange: function(event){
             {
               this.state.linkList.map(function(word, i) {
                 word = word.replace('--', '').replace(/~/gi, '').replace('subject','');
-                if (this.buttonDataCheck(word)) { // word is a stopword or has already been grounded
-                  return (   
+                if (stopWordList.includes(word) || defaultPrepositions.includes(word)) { // word is a stopword or has already been grounded
+                  return(" " + word + " ");
+                } else {
+                  return (
                     <button key={i} onClick={() => {this.link(i)}} className='btn btn-xs link-btn' style={btnStyle}>{word}</button>
                   );
-                } else {
-                  return(" " + word + " ");
                 }
               },this)
             }
@@ -1411,7 +1340,6 @@ var RuleComponent = React.createClass({
     for(var ref in this.refs) {
       if(ref.includes('action')) {
         actions.push(this.refs[ref].getAction());
-        this.refs[ref].setActionSubjObj();
         ops.push(this.refs[ref].getOp());
         actionsTests.push(this.refs[ref].actionCheck());
       }
@@ -1424,7 +1352,6 @@ var RuleComponent = React.createClass({
 
     
     var consequence = this.refs.consequence.getData();
-    this.refs.consequence.setConsSubjObj();
     var consequencePredicate = consequence['cPredicate']
     var consequenceSubject = consequence['cSubject']
     var consequenceObject = consequence['cObject']
